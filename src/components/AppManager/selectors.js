@@ -13,4 +13,17 @@ const selectProblemStatements = createSelector(
     [selectappManager],
     appManagerState => appManagerState.problemStatements.data
 )
-export {selectUserInfo, selectProblemStatements}
+
+const selectTags = createSelector(
+    [selectappManager],
+    appManagerState => appManagerState.tags.data
+)
+
+
+const selectDashboardData = createSelector(
+    [selectappManager],
+    appManagerState => appManagerState.dashboardData.data
+)
+
+
+export {selectUserInfo, selectProblemStatements,selectTags,selectDashboardData}

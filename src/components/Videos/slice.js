@@ -7,7 +7,7 @@ export const initialState = {
     }
 }
 
-const loginSlice = createSlice({
+const videoSlice = createSlice({
     name: "videos",
     initialState,
     reducers: {
@@ -18,13 +18,18 @@ const loginSlice = createSlice({
        },
        videoUploaded (state){
         state.uploadVideo.saving= false
+       },
+       videoUploadingError(state){
+        state.uploadVideo.error= true;
+        state.uploadVideo.saving= false
        }
     }
 })
 
 export const {
     uploadVideo,
-    videoUploaded
-} = loginSlice.actions
+    videoUploaded,
+    videoUploadingError
+} = videoSlice.actions
 
-export const {reducer} =  loginSlice;
+export default videoSlice.reducer;

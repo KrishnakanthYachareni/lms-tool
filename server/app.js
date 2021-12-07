@@ -7,8 +7,10 @@ var cors = require('cors')
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-var videoRouter = require("./routes/videos")
+var mediaRouter = require("./routes/media")
 var problemStatementsRouter = require("./routes/problemStatements")
+var tagRouter = require("./routes/tags")
+
 
 var app = express();
 const InitiateMongoServer = require("./db");
@@ -30,8 +32,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use(express.static('uploads'));
 app.use('/', usersRouter);
-app.use('/video', videoRouter);
+app.use('/media', mediaRouter);
 app.use('/problemStatement', problemStatementsRouter);
+app.use('/tag', tagRouter);
 
 
 // catch 404 and forward to error handler

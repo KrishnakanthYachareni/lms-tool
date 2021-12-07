@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
-const UserSchema = mongoose.Schema({
-    project: {
+const MediaSchema = mongoose.Schema({
+    problemStatement: {
         type: String,
         required: true
     },
@@ -13,15 +13,21 @@ const UserSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    videoUrl: {
+    mediaUrl: {
         type: String,
         required: true
     },
     tags: [{
         type: String,
         required: false
-    }]
-});
+    }],
+    mediaType: {
+        type: String,
+        required: true
+    }
+}, {
+    timestamps: true
+  });
 
 // export model user with AdminUserSchema
-module.exports = mongoose.model("videos", UserSchema);
+module.exports = mongoose.model("media", MediaSchema);

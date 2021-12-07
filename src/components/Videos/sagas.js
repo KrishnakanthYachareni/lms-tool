@@ -9,11 +9,16 @@ import {
 
 export function* postVideo({ payload }) {
     console.log(payload,'dada')
-    const {file,group,project,tags,decription } = payload;
+    const {file,group,problemStatement,tags,description } = payload;
     let formData = new FormData()
+   
+    formData.append('group', "group1")
+    formData.append('problemStatement', problemStatement)
+    formData.append('tags', tags)
+    formData.append('description', description)
+    formData.append('mediaType', 'video')
     formData.append('file', file)
-    formData.append('group', group)
-    const requestUrl = `${API_ENDPOINT}/video`
+    const requestUrl = `${API_ENDPOINT}/media`
 
     try{
         const options = {

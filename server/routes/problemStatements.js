@@ -1,26 +1,29 @@
 var express = require('express');
 var router = express.Router();
-const Project = require("../models/project");
+const ProblemStatement = require("../models/problemStatements");
 
 router.get('/', function(req, res, next) {
-    Project.find({}).then(data =>{
-        return res.send(data)
+    ProblemStatement.find({}).then(data =>{
+        return res.send(data.map(elem=> elem.title))
     })
 });
 
 router.post('/', function(req, res, next) {
 
-    const {title,description,tags, category, createdby, references} = req.body
-    const project  = new Project({
+    const {title,description,tags, category, createdBy,year, references} = req.body
+    const problemStatement  = new ProblemStatement({
         title,
         description,
         tags,
         category,
-        createdby,
-        references
+        createdBy,
+        references,
+        year,
     })
-    project.save().then(data =>{
+    problemStatement.save().then(data =>{
         return res.send(data)
+    }).catch(err=>{
+        return res.send({"error": err})
     })
 });
 
