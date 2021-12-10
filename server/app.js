@@ -27,7 +27,8 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+console.log(__dirname)
+app.use(express.static(path.join(__dirname, 'uploads')));
 
 app.use('/', indexRouter);
 app.use(express.static('uploads'));
@@ -36,6 +37,7 @@ app.use('/media', mediaRouter);
 app.use('/problemStatement', problemStatementsRouter);
 app.use('/tag', tagRouter);
 
+app.use('/uploads', express.static('uploads'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

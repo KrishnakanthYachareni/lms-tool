@@ -196,7 +196,7 @@ export default function SearchBar() {
   return (
     <Root>
       <div {...getRootProps()}>
-        <Label {...getInputLabelProps()}>Search viedos, presentations, images, problem statements etc!</Label>
+        <Label {...getInputLabelProps()}>Search videos, presentations, images, problem statements etc!</Label>
         <InputWrapper ref={setAnchorEl} className={focused ? 'focused' : ''}>
           {value.map((option, index) => (
             <StyledTag label={option.name} {...getTagProps({ index })} />

@@ -13,6 +13,7 @@ import SearchBar from '../SearchBar/index.js';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectDashboardData } from '../AppManager/selectors.js';
 import { loadDashboardData } from '../AppManager/slice.js';
+import Button from '@mui/material/Button';
 
 const columns = [
   { id: 'mediaType', label: 'File\u00a0Type', minWidth: 170 },
@@ -31,6 +32,13 @@ const columns = [
     align: 'right',
     format: (value) => value.toLocaleString('en-US'),
   },
+  {
+    id: "mediaUrl",
+    label: 'Actions',
+    minWidth: 170,
+    align: 'right',
+    format: (value) => value.toLocaleString('en-US'),
+  }
 
 ];
 
@@ -114,14 +122,16 @@ export default function DashboardSummary() {
                             {columns.map((column) => {
                               console.log(row,column)
                               const value = row[column.id];
+                              console.log(value)
                               return (
                                 <TableCell key={column.id} align={column.align}>
                                   {column.format && typeof value === 'number'
                                     ? column.format(value)
-                                    : value}
+                                    : column.label=='Actions'?<a href={`http://localhost:5000/uploads/${value}`} download="file" target="_blank"> Download </a>: value}
                                 </TableCell>
                               );
                             })}
+                            
                           </TableRow>
                         );
                       })}
