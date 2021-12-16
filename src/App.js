@@ -13,27 +13,27 @@ function App() {
   return (
     <div className="App">
       <AppManager />
-      <BrowserRouter>
+      <BrowserRouter basename={'/dsd4'}>
         <Switch>
-          <Route exact path="/dashboard">
+          <Route exact path={`${process.env.PUBLIC_URL}/dashboard`}>
             <Dashboard />
           </Route>
-          <Route exact path="/signup">
+          <Route exact path={`${process.env.PUBLIC_URL}/signup`}>
             <SignUp />
           </Route>
-          <Route exact path="/">
+          <Route exact path={`${process.env.PUBLIC_URL}/`}>
             <LoginPage />
           </Route>
-          <Route exact path="/video">
+          <Route exact path={`${process.env.PUBLIC_URL}/video`}>
             <Videos />
           </Route>
-          <Route exact path="/groups">
+          <Route exact path={`${process.env.PUBLIC_URL}/groups`}>
             <Groups />
           </Route>
-          <Route exact path="/group/:id">
+          <Route exact path={`${process.env.PUBLIC_URL}/group/:id`}>
             <GroupDetails />
           </Route>
-          <Route exact path="/problem-statements">
+          <Route exact path={`${process.env.PUBLIC_URL}/problem-statements`}>
             <ProblemStatements />
           </Route>
          
