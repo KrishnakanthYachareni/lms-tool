@@ -13,7 +13,7 @@ import PostAddIcon from '@mui/icons-material/PostAdd';
 
 export const mainListItems = (
     <div>
-        <ListItem  button component="a" href="/dashboard">
+        <ListItem  button component="a" href="/dsd4/#/dashboard">
             <ListItemIcon>
                 <DashboardIcon />
             </ListItemIcon>
@@ -25,7 +25,7 @@ export const mainListItems = (
             </ListItemIcon>
             <ListItemText primary="Students" />
         </ListItem>
-        <ListItem  button component="a" href="/groups">
+        <ListItem  button component="a" href="/dsd4/#/groups">
             <ListItemIcon>
                 <PeopleIcon />
             </ListItemIcon>
@@ -37,7 +37,7 @@ export const mainListItems = (
             </ListItemIcon>
             <ListItemText primary="Templates" />
         </ListItem>
-        <ListItem button component="a" href="/problem-statements">
+        <ListItem button component="a" href="/dsd4/#/problem-statements">
             <ListItemIcon>
                 <LayersIcon />
             </ListItemIcon>
@@ -55,7 +55,7 @@ export const mainListItems = (
 export const secondaryListItems = (
     <div>
         <ListSubheader inset>Upload Student's Content</ListSubheader>
-        <ListItem button component="a" href="/video">
+        <ListItem button component="a" href="/dsd4/#/video">
             <ListItemIcon >
                 <VideoLibrarySharpIcon />
             </ListItemIcon>

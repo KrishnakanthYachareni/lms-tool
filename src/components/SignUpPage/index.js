@@ -70,7 +70,7 @@ export default function SignUp() {
   useEffect(() => {
     if (Object.keys(userInfo).length !== 0 && userInfo) {
       alert("Account created successfully")
-      history.push('/')
+      history.push('/dsd4/#')
     }
   }, [userInfo])
   return (

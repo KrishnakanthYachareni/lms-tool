@@ -36,4 +36,9 @@ router.post("/", upload.single('file'), (req, res) => {
 
 });
 
+router.get('/', (req,res)=>{
+    res.send("Server Running");
+    return;
+})
+
 module.exports = router;

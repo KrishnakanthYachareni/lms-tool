@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectDashboardData } from '../AppManager/selectors.js';
 import { loadDashboardData } from '../AppManager/slice.js';
 import Button from '@mui/material/Button';
+import { API_ENDPOINT } from '../../constants.js';
 
 const columns = [
   { id: 'mediaType', label: 'File\u00a0Type', minWidth: 170 },
@@ -127,7 +128,7 @@ export default function DashboardSummary() {
                                 <TableCell key={column.id} align={column.align}>
                                   {column.format && typeof value === 'number'
                                     ? column.format(value)
-                                    : column.label=='Actions'?<a href={`http://localhost:5000/uploads/${value}`} download="file" target="_blank"> Download </a>: value}
+                                    : column.label=='Actions'?<a href={`${API_ENDPOINT}/uploads/${value}`} download="file" target="_blank"> Download </a>: value}
                                 </TableCell>
                               );
                             })}

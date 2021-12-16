@@ -57,7 +57,7 @@ export default function LoginPage() {
     console.log('userinfo', userInfo)
     if (Object.keys(userInfo).length !== 0 && userInfo) {
       dispatch(loadProblemStatements())
-      history.push('/dashboard')
+      history.push('/dsd4/#/dashboard')
     }
   }, [userInfo])
 
