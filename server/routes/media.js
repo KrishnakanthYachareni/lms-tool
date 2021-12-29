@@ -19,11 +19,19 @@ var storage = multer.diskStorage({
 var upload = multer({ storage: storage })
 
 
-router.post("/", upload.single('file'), (req, res) => {
-    console.log(req.body, req.file.filename)
+router.post("/", (req, res) => {
+    console.log(req.body,)
     let { tags, description, problemStatement, group, mediaType } = req.body
+    Tag.insertMany(data, { ordered: false })
+        .then(data => {
+            console.log("tags created")
+        })
+        .catch(err => {
+            console.log("tags creation error")
+        })
+
     let media = new Media({
-        tags,
+        tags: tags.map(item => item.name),
         description,
         problemStatement,
         group,
@@ -42,15 +50,15 @@ router.post("/", upload.single('file'), (req, res) => {
 
 
 
-router.post("/search",  (req, res) => {
+router.post("/search", (req, res) => {
     let { search } = req.body
     console.log(search)
 
-    Media.find({"tags":{"$in": search}})
-    .then(data=>{
-        console.log(data)
-        res.send(data)
-    })
+    Media.find({ "tags": { "$in": search } })
+        .then(data => {
+            console.log(data)
+            res.send(data)
+        })
 });
 
 module.exports = router;

@@ -75,7 +75,6 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 
 export default function Header() {
-  console.log('dashboard')
   const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
@@ -96,7 +95,7 @@ export default function Header() {
  const handleLogout =() => {
   console.log('logout')
   dispatch(setUserData({}))
-  history.push('/')
+  history.push('/dsd4/#')
     }
   return (
         <AppBar position="absolute" open={open}>

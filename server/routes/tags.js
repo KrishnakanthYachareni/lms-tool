@@ -9,16 +9,30 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/', function(req, res, next) {
-
     const {name} = req.body
-    const tag  = new Tag({
-        name
+    console.log(name)
+    Tag.findOne({
+        name: name}
+    ).then(data =>{
+        console.log(data)
+        if(!data){
+            const tag  = new Tag({
+                name
+            })
+            tag.save().then(data =>{
+                return res.send(data)
+            }).catch(err=>{
+                return res.send({"error": err})
+            })
+        }
+        else{
+            return res.send(data)
+        }
     })
-    tag.save().then(data =>{
-        return res.send(data)
-    }).catch(err=>{
+   .catch(err=>{
         return res.send({"error": err})
     })
 });
+
 
 module.exports = router;

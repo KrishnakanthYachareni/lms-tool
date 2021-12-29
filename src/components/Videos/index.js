@@ -77,7 +77,7 @@ export default function Videos() {
       problemStatement: formValues.problemStatement,
       group: formValues.group,
       description: formValues.description,
-      tags: tags.map(item => item.text)
+      tags: tags.map(item =>( {name: item.text}))
     }))
     console.log(uploadingError)
     if(uploadingError){
