@@ -17,7 +17,7 @@ import Paper from '@mui/material/Paper';
 import Container from '@mui/material/Container';
 import TextareaAutosize from '@mui/material/TextareaAutosize';
 import { WithContext as ReactTags } from 'react-tag-input';
-import { uploadVideo } from './slice.js';
+import { uploadPresentation } from './slice.js';
 import { selectUploadingError } from './selectors.js';
 
 
@@ -43,7 +43,7 @@ const groupOptions = [
   "group1", "group2"
 ]
 
-export default function Videos() {
+export default function Presentations() {
   const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
@@ -73,10 +73,10 @@ export default function Videos() {
   const handleSubmit = (event) => {
     event.preventDefault();
 	 let tagsObject =[];
-    tags.map(item=>{
-      tagsObject.push(item.text)
-    })
-    dispatch(uploadVideo({
+   tags.map(item=>{
+    tagsObject.push(item.text)
+  })
+    dispatch(uploadPresentation({
       file: file,
       problemStatement: formValues.problemStatement,
       group: formValues.group,
@@ -85,7 +85,7 @@ export default function Videos() {
     }))
     console.log(uploadingError)
     if(uploadingError){
-      alert("Error uploadig video")
+      alert("Error uploadig Presentation")
     }
     if(!uploadingError){
       alert("Upload Successfull")
@@ -190,7 +190,7 @@ export default function Videos() {
                       <TextareaAutosize
                         minRows={6}
                         aria-label="maximum height"
-                        placeholder="Description of the Video"
+                        placeholder="Description of the Presentation"
                         style={{ width: "100%" }}
                         onChange={(event) => {
                           console.log(event.target.value)
@@ -204,7 +204,7 @@ export default function Videos() {
                     </Grid>
 
                     <Grid item xs={12} sm={8}>
-                      <input accept="video/*" id="contained-button-file" ref={ref} multiple type="file" onChange={handleFile} />
+                      <input accept="videos/*" id="contained-button-file" ref={ref} multiple type="file" onChange={handleFile} />
                     </Grid>
                     <Grid item xs={12} sm={8}>
                       <ReactTags
@@ -227,7 +227,7 @@ export default function Videos() {
                         size="medium"
                         onClick={handleSubmit}
                       >
-                        Upload Video
+                        Upload Presentation
                       </Button>
                     </Grid>
                   </Grid>

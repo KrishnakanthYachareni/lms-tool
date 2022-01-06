@@ -14,6 +14,7 @@ var tagRouter = require("./routes/tags")
 
 var app = express();
 const InitiateMongoServer = require("./db");
+app.use(cors())
 
 // Initiate Mongo Server
 InitiateMongoServer();
@@ -21,8 +22,7 @@ InitiateMongoServer();
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
-app.use(cors())
-app.enable('trust proxy')
+// app.enable('trust proxy')
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -56,3 +56,4 @@ app.use(function(err, req, res, next) {
 });
 
 module.exports = app;
+

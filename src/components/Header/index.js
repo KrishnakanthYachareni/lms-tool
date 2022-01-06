@@ -13,7 +13,7 @@ import MenuItem from '@mui/material/MenuItem';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectUserInfo } from '../AppManager/selectors';
 import { useHistory } from 'react-router';
-import {setUserData} from '../AppManager/slice'
+import { setUserData } from '../AppManager/slice'
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -74,11 +74,9 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 );
 
 
-export default function Header() {
-  const [open, setOpen] = React.useState(true);
-  const toggleDrawer = () => {
-    setOpen(!open);
-  };
+export default function Header({open,toggleDrawer}) {
+  
+  console.log(open)
   const [anchorEl, setAnchorEl] = React.useState(null);
   const ProfileOpen = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -89,69 +87,67 @@ export default function Header() {
   };
   const history = useHistory()
 
-  const userInfo = useSelector(selectUserInfo);
   const dispatch = useDispatch()
-
- const handleLogout =() => {
-  console.log('logout')
-  dispatch(setUserData({}))
-  history.push('/dsd4/#')
-    }
+  console.log(open)
+  const handleLogout = () => {
+    console.log('logout')
+    dispatch(setUserData({}))
+    history.push('/')
+  }
   return (
-        <AppBar position="absolute" open={open}>
-          <Toolbar
-            sx={{
-              pr: '24px', // keep right padding when drawer closed
-            }}
-          >
-            <IconButton
-              edge="start"
-              color="inherit"
-              aria-label="open drawer"
-              onClick={toggleDrawer}
-              sx={{
-                marginRight: '36px',
-                ...(open && { display: 'none' }),
-              }}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Typography
-              component="h1"
-              variant="h6"
-              color="inherit"
-              noWrap
-              sx={{ flexGrow: 1 }}
-            >
-              Dashboard
-            </Typography>
-            <IconButton color="inherit">
-              {/* <Badge badgeContent={4} color="secondary">
+    <AppBar position="absolute" open={open}>
+      <Toolbar
+        sx={{
+          pr: '24px', // keep right padding when drawer closed
+        }}
+      >
+        <IconButton
+          edge="start"
+          color="inherit"
+          aria-label="open drawer"
+          onClick={toggleDrawer}
+          sx={{
+            marginRight: '36px',
+            ...(open && { display: 'none' }),
+          }}
+        >
+          <MenuIcon />
+        </IconButton>
+        <Typography
+          component="h1"
+          variant="h6"
+          color="inherit"
+          noWrap
+          sx={{ flexGrow: 1 }}
+        >
+          Dashboard
+        </Typography>
+        <IconButton color="inherit">
+          {/* <Badge badgeContent={4} color="secondary">
                 <NotificationsIcon />
               </Badge> */}
-              <PersonOutlineIcon
-                aria-controls="basic-menu"
-                aria-haspopup="true"
-                aria-expanded={ProfileOpen ? 'true' : undefined}
-                onClick={handleClick}
-              />
-            </IconButton>
-            <Menu
-              id="basic-menu"
-              anchorEl={anchorEl}
-              open={ProfileOpen}
-              onClose={handleClose}
-              MenuListProps={{
-                'aria-labelledby': 'basic-button',
-              }}
-            >
-              <MenuItem onClick={handleClose}>Profile</MenuItem>
-              <MenuItem onClick={handleClose}>My account</MenuItem>
-              <MenuItem onClick={handleLogout}>Logout</MenuItem>
-            </Menu>
+          <PersonOutlineIcon
+            aria-controls="basic-menu"
+            aria-haspopup="true"
+            aria-expanded={ProfileOpen ? 'true' : undefined}
+            onClick={handleClick}
+          />
+        </IconButton>
+        <Menu
+          id="basic-menu"
+          anchorEl={anchorEl}
+          open={ProfileOpen}
+          onClose={handleClose}
+          MenuListProps={{
+            'aria-labelledby': 'basic-button',
+          }}
+        >
+          <MenuItem onClick={handleClose}>Profile</MenuItem>
+          <MenuItem onClick={handleClose}>My account</MenuItem>
+          <MenuItem onClick={handleLogout}>Logout</MenuItem>
+        </Menu>
 
-          </Toolbar>
-        </AppBar>       
+      </Toolbar>
+    </AppBar>
   );
 }
-

@@ -3,9 +3,6 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Link from '@mui/material/Link';
-import DashboardSummary from '../DashboardSummary.js/index.js';
 import Header from '../Header/index.js';
 import Sider from '../Sider/index.js';
 
@@ -17,112 +14,62 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import TablePagination from '@mui/material/TablePagination';
 import Button from '@mui/material/Button';
-
-function not(a, b) {
-    return a.filter((value) => b.indexOf(value) === -1);
-}
-
-function intersection(a, b) {
-    return a.filter((value) => b.indexOf(value) !== -1);
-}
-
-function Copyright(props) {
-    return (
-        <Typography variant="body2" color="text.secondary" align="center" {...props}>
-            {'Copyright © '}
-            <Link color="inherit" href="https://mui.com/">
-                Your Website
-            </Link>{' '}
-            {new Date().getFullYear()}
-            {'.'}
-        </Typography>
-    );
-}
-
-const drawerWidth = 240;
+import { selectProblemStatementsAll } from '../AppManager/selectors.js';
+import { useDispatch, useSelector } from 'react-redux';
+import { loadProblemStatementsAll } from '../AppManager/slice.js';
+import { API_ENDPOINT } from '../../constants.js';
 
 
 const mdTheme = createTheme();
-const Pop = props => {
-    const { className, anchorEl, style, ...rest } = props
-    const bound = anchorEl.getBoundingClientRect()
-    return <div {...rest} style={{
-        position: 'absolute',
-        zIndex: 9999,
-        width: bound.width
-    }} />
-}
 
 const columns = [
-    { id: 'groupName', label: 'Problem\u00a0Statement', minWidth: 170 },
-    { id: 'year', label: 'Year', minWidth: 100 },
-    // {
-    //   id: 'population',
-    //   label: 'Team\u00a0Name',
-    //   minWidth: 170,
-    //   align: 'right',
-    //   format: (value) => value.toLocaleString('en-US'),
-    // },
-    // {
-    //   id: 'size',
-    //   label: 'Last\u00a0Modified\u00a0Date',
-    //   minWidth: 170,
-    //   align: 'right',
-    //   format: (value) => value.toLocaleString('en-US'),
-    // },
-    // {
-    //   id: 'density',
-    //   label: 'Year',
-    //   minWidth: 170,
-    //   align: 'right',
-    //   // format: (value) => value.toFixed(2),
-    // },
-];
-function createData(groupName, year, id) {
-    return { groupName, year, id };
-}
+    { id: 'title', label: 'Problem\u00a0Statement', minWidth: 100 },
+    // { id: 'references', label: 'Mediaattachements', minWidth: 100 },
 
-const rows = [
-    createData('Problem1', 2021, 1),
-    createData('Problem2', 2019),
-    createData('Problem3', 2018),
-    createData('Problem4', 2017),
-    createData('Group5', 2016),
+    {
+      id: 'description',
+      label: 'Description',
+      minWidth: 170,
+      align: 'right',
+    },
+    {
+      id: 'year',
+      label: 'Uploaded Year',
+      minWidth: 170,
+      align: 'right',
+    },
+    { id: 'tags', label: 'tags', minWidth: 100,
+},
+    {
+        id: 'createdBy',
+        label: 'Created By',
+        minWidth: 170,
+        align: 'right',
+      },
+  
+  ];
 
-];
 
 export default function ProblemStatements() {
-    console.log('dashboard')
     const [open, setOpen] = React.useState(true);
     const toggleDrawer = () => {
+        console.log('changed')
         setOpen(!open);
     };
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const ProfileOpen = Boolean(anchorEl);
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
-    const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const dispatch = useDispatch()
+    const [rows,setRows] = React.useState([])
 
-    const handleChangePage = (event, newPage) => {
-        setPage(newPage);
-    };
+    const problemStatementsAll = useSelector(selectProblemStatementsAll)
 
-    const handleChangeRowsPerPage = (event) => {
-        setRowsPerPage(+event.target.value);
-        setPage(0);
-    };
+    React.useEffect(()=>{
+        dispatch(loadProblemStatementsAll())
+    },[])
 
-    const handleRowClick = (id) => {
-        console.log(id)
-    }
-
+    React.useEffect(()=>{
+        console.log(problemStatementsAll)
+        setRows(problemStatementsAll)
+    },[problemStatementsAll])
 
     return (
         <ThemeProvider theme={mdTheme}>
@@ -143,11 +90,10 @@ export default function ProblemStatements() {
                     }}
                 >
                     <Toolbar />
-                    {/* Recent Orders */}
                     <Grid container spacing={10} alignItems="center"
                         justifyContent="center">
                         <Grid item xs={12} md={12} lg={12} style={{ marginTop: "50px" }}>
-                            <Button variant="contained">Create New Problem Statement</Button>
+                            <Button variant="contained" href="/dsd4/#/problem-statements/create">Create New Problem Statement</Button>
                         </Grid>
                         <Grid
                             item xs={9} md={10} lg={10}>
@@ -178,42 +124,42 @@ export default function ProblemStatements() {
                                         </TableHead>
                                         <TableBody>
                                             {rows
-                                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                                
                                                 .map((row) => {
                                                     return (
                                                         <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                                                            {/* {columns.map((column) => {
-                                                                const value = row[column.id];
-                                                                return (
-                                                                    <TableCell key={column.id} align={column.align}>
-                                                                        {column.format && typeof value === 'number'
-                                                                            ? column.format(value)
-                                                                            : value}
-                                                                    </TableCell>
-                                                                );
-                                                            
-                                                            })} */}
-                                                            <TableCell key={row.id}>
-                                                                <a  >{row['groupName']}</a>
-                                                            </TableCell>
-                                                            <TableCell key={row.id}>
-                                                                {row['year']}
-                                                            </TableCell>
-                                                        </TableRow>
+                                                        {columns.map((column) => {
+                                                          console.log(row,column)
+                                                          const raw = row[column.id];
+                                                          let value; 
+                                                          if(column.label =='tags'){
+                                                            value = raw.map(item=> item+',')
+                                                           
+                                                          }
+                                                          else if(column.label=='references'){
+                                                            // value = raw.map(value=>
+                                                            //     <a href={`${API_ENDPOINT}/uploads/${value.media}`} download="file" target="_blank" />
+                                                            //  )
+                                                            console.log(raw)
+                                                            value= 1
+                                                          }
+                                                          else{
+                                                              value = raw
+                                                          }
+                                                          console.log(value)
+                                                          return (
+                                                            <TableCell key={column.id} align={column.align}>
+                                                             {value}
+                                                             </TableCell>
+                                                          );
+                                                        })}
+                                                        
+                                                      </TableRow>
                                                     );
                                                 })}
                                         </TableBody>
                                     </Table>
                                 </TableContainer>
-                                <TablePagination
-                                    rowsPerPageOptions={[10, 25, 100]}
-                                    component="div"
-                                    count={rows.length}
-                                    rowsPerPage={rowsPerPage}
-                                    page={page}
-                                    onPageChange={handleChangePage}
-                                    onRowsPerPageChange={handleChangeRowsPerPage}
-                                />
                             </Paper>
 
                         </Grid>

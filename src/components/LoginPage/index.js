@@ -13,9 +13,9 @@ import Grid from '@mui/material/Grid';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { loadProblemStatements, loadUserLogin } from '../AppManager/slice'
+import { loadProblemStatements, loadUserLogin, userLoginError } from '../AppManager/slice'
 import { useSelector } from 'react-redux';
-import { selectUserInfo } from '../AppManager/selectors';
+import { selectUserInfo, selectUserInfoError } from '../AppManager/selectors';
 import { useHistory } from 'react-router';
 
 function Copyright(props) {
@@ -48,10 +48,10 @@ export default function LoginPage() {
       password,
       userType
     }))
-
   };
-  const userInfo = useSelector(selectUserInfo);
 
+  const userInfo = useSelector(selectUserInfo);
+  const userInfoError = useSelector(selectUserInfoError)
 
   useEffect(() => {
     console.log('userinfo', userInfo)
@@ -61,6 +61,14 @@ export default function LoginPage() {
     }
   }, [userInfo])
 
+  
+  useEffect(()=>{
+    if(userInfoError){
+      alert("Invalid Credentials, please try again!")
+      setUsername('')
+      setPassword('')
+    }
+  },[userInfoError])
 
   return (
     <ThemeProvider theme={theme}>

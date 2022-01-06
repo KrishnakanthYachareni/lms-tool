@@ -8,10 +8,6 @@ const ProblemStatementsSchema = mongoose.Schema({
     tags: [{
         type: String,
     }],
-    category: {
-        type: String,
-        required: true
-    },
     description: {
         type: String,
         required: true
@@ -30,5 +26,4 @@ const ProblemStatementsSchema = mongoose.Schema({
     }
 });
 
-// export model user with AdminUserSchema
 module.exports = mongoose.model("ProblemStatements", ProblemStatementsSchema);

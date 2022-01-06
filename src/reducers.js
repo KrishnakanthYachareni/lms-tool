@@ -1,6 +1,5 @@
 import { combineReducers } from "redux";
 import { connectRouter } from "connected-react-router";
-import {reducer as Videosreducer} from './components/Videos/slice'
 
 import history from './history';
 

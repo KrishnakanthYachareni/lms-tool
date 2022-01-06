@@ -1,7 +1,9 @@
+const { tabScrollButtonClasses } = require('@mui/material');
 var express = require('express');
 var router = express.Router();
 var multer = require('multer')
 const Media = require("../models/media");
+const Tag = require("../models/tags");
 
 
 var storage = multer.diskStorage({
@@ -19,19 +21,30 @@ var storage = multer.diskStorage({
 var upload = multer({ storage: storage })
 
 
-router.post("/", (req, res) => {
+router.post("/",  upload.single('file'),(req, res) => {
     console.log(req.body,)
     let { tags, description, problemStatement, group, mediaType } = req.body
-    Tag.insertMany(data, { ordered: false })
+	console.log(tags)
+
+	let tagsList = []
+    let tagsObject = []
+    
+	tags.split(',').map(item=>{
+		tagsList.push(item)
+        tagsObject.push({
+            name: item
+        })
+	})
+    Tag.insertMany(tagsObject, { ordered: false })
         .then(data => {
-            console.log("tags created")
+            console.log("tags created",data)
         })
         .catch(err => {
             console.log("tags creation error")
         })
 
     let media = new Media({
-        tags: tags.map(item => item.name),
+        tags: tagsList,
         description,
         problemStatement,
         group,

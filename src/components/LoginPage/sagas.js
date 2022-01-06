@@ -19,10 +19,15 @@ export function* getLoginInfo({ payload }) {
                 'Content-Type': "application/json"
             }
         }
-        const response =yield call(response, requestUrl, options)
-
-        yield put(userLoginLoaded(response));
-    }
+        const response =yield call(request, requestUrl, options)
+        console.log('response23', response)
+        if(response.success){
+            yield put(userLoginLoaded(response));
+        }
+        else{
+            yield put(userLoginError(response))
+        }
+       }
     catch(err){
         yield put(userLoginError());
 

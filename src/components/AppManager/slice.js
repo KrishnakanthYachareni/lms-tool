@@ -11,6 +11,11 @@ export const initialState = {
         loading: false,
         error: false
     },
+    problemStatementsAll: {
+        data:[],
+        loading: false,
+        error: false
+    },
     tags:{
         data:[],
         loading: false,
@@ -34,13 +39,14 @@ const loginSlice = createSlice({
 
         userLoginLoaded(state, { payload }) {
             console.log('check123',payload)
-            state.user.data = payload
+            state.user.data = payload.data
             state.user.loading = false;
             state.user.error = false
         },
 
         userLoginError(state) {
-            state.user.loading = true;
+            console.log('state.data')
+            state.user.loading = false;
             state.user.error = true
         },
 
@@ -80,6 +86,22 @@ const loginSlice = createSlice({
         problemStatementsLoadingError(state) {
             state.problemStatements.loading = true;
             state.problemStatements.error = true
+        },
+
+        loadProblemStatementsAll(state) {
+            state.problemStatementsAll.loading = true;
+            state.problemStatementsAll.error = false
+        },
+
+        problemStatementsLoadedAll(state, { payload }) {
+            state.problemStatementsAll.data = payload
+            state.problemStatementsAll.loading = false;
+            state.problemStatementsAll.error = false
+        },
+
+        problemStatementsLoadingErrorAll(state) {
+            state.problemStatementsAll.loading = true;
+            state.problemStatementsAll.error = true
         },
 
 
@@ -132,7 +154,11 @@ export const {
     loadTags,
     dashboardDataLoaded,
     dashboardDataLoadingError,
-    loadDashboardData
+    loadDashboardData,
+    loadProblemStatementsAll,
+    problemStatementsLoadedAll,
+    problemStatementsLoadingErrorAll
+    
 } = loginSlice.actions
 
 export default loginSlice.reducer;

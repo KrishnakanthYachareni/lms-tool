@@ -5,7 +5,6 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
@@ -13,7 +12,6 @@ import SearchBar from '../SearchBar/index.js';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectDashboardData } from '../AppManager/selectors.js';
 import { loadDashboardData } from '../AppManager/slice.js';
-import Button from '@mui/material/Button';
 import { API_ENDPOINT } from '../../constants.js';
 
 const columns = [
@@ -46,8 +44,7 @@ const columns = [
 
 
 export default function DashboardSummary() {
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  
   const dispatch = useDispatch()
   const dashboardData = useSelector(selectDashboardData)
 
@@ -64,14 +61,7 @@ export default function DashboardSummary() {
   React.useEffect(()=>{
     dispatch(loadDashboardData())
   },[])
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
-  };
+ 
 
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>

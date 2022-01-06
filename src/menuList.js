@@ -61,7 +61,7 @@ export const secondaryListItems = (
             </ListItemIcon>
             <ListItemText primary="Upload Videos" />
         </ListItem>
-        <ListItem button component="a">
+        <ListItem button component="a" href="/dsd4/#/presentation">
             <ListItemIcon>
                 <PostAddIcon />
             </ListItemIcon>

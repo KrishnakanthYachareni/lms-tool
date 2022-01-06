@@ -37,3 +37,9 @@
     transform: translateY(0px);
   }
 }
+
+
+.ReactTags__tagInputField {
+  width: 100%;
+  height: 50px;
+}

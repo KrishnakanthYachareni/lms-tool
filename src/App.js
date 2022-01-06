@@ -9,6 +9,8 @@ import Groups from './components/Groups';
 import GroupDetails from './components/Groups/GroupDetail';
 
 import ProblemStatements from './components/ProblemStatements'
+import Presentations from './components/Presentations';
+import ProblemStatementCreate from './components/ProblemStatements/CreateProblemStatement';
 function App() {
   return (
     <div className="App">
@@ -35,6 +37,13 @@ function App() {
           </Route>
           <Route exact path="/problem-statements">
             <ProblemStatements />
+          </Route>
+          <Route exact path="/problem-statements/create">
+            <ProblemStatementCreate />
+          </Route>
+          
+          <Route exact path="/presentation">
+            <Presentations />
           </Route>
          
         </Switch>

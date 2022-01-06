@@ -8,22 +8,18 @@ import Sider from '../Sider/index.js';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
-import { useDispatch } from 'react-redux';
-import { loadProblemStatements } from '../AppManager/slice'
-import { useSelector } from 'react-redux';
-import { selectProblemStatements } from '../AppManager/selectors';
-import Autocomplete from '@mui/material/Autocomplete';
+import { useDispatch, useSelector } from 'react-redux';
 import Paper from '@mui/material/Paper';
 import Container from '@mui/material/Container';
 import TextareaAutosize from '@mui/material/TextareaAutosize';
 import { WithContext as ReactTags } from 'react-tag-input';
-import { uploadVideo } from './slice.js';
+import { uploadProblemStatement } from './slice.js';
 import { selectUploadingError } from './selectors.js';
+import { selectUserInfo } from '../AppManager/selectors.js';
 
 
 const Keys = {
   TAB: 9,
-  SPACE: 32,
   COMMA: 188,
   ENTER: 13
 };
@@ -32,27 +28,20 @@ const Keys = {
 const mdTheme = createTheme();
 
 const defaultValues = {
-  problemStatement: "",
-  group: "",
+  title: "",
   description: "",
-  tags: []
+  tags: [],
+  year: new Date().getFullYear(),
 };
 
 
-const groupOptions = [
-  "group1", "group2"
-]
-
-export default function Videos() {
+export default function ProblemStatementCreate() {
   const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
   };
   const [file, setFile] = React.useState(null)
   const dispatch = useDispatch()
-  const allProblemStatements = useSelector(selectProblemStatements)
-
-
   
   const [formValues, setFormValues] = React.useState(defaultValues);
   const [tags, setTags] = React.useState(defaultValues.tags)
@@ -61,31 +50,31 @@ export default function Videos() {
   const uploadingError = useSelector(selectUploadingError)
   const ref = React.useRef();
 
-  React.useEffect(() => {
-    dispatch(loadProblemStatements())
-  }, [])
-
+  const userInfo = useSelector(selectUserInfo);
+  console.log(userInfo)
   React.useEffect(() => {
     console.log(formValues)
   }, [formValues])
 
 
   const handleSubmit = (event) => {
+      console.log('create')
     event.preventDefault();
 	 let tagsObject =[];
     tags.map(item=>{
       tagsObject.push(item.text)
-    })
-    dispatch(uploadVideo({
+      })
+    
+    dispatch(uploadProblemStatement({
       file: file,
-      problemStatement: formValues.problemStatement,
-      group: formValues.group,
+      title: formValues.title,
+      year: formValues.year,
       description: formValues.description,
-      tags: tagsObject
+      tags: tagsObject,
+      createdBy: userInfo.email,
     }))
-    console.log(uploadingError)
-    if(uploadingError){
-      alert("Error uploadig video")
+        if(uploadingError){
+      alert("Error uploadig problemStatement")
     }
     if(!uploadingError){
       alert("Upload Successfull")
@@ -93,14 +82,13 @@ export default function Videos() {
       ref.current.value=""
       setTags([])
     }
-
     
   };
 
   const handleFile = (event) => {
     console.log(event.target.files)
     if (event.target.files.length > 0) {
-      setFile(event.target.files[0])
+      setFile(event.target.files)
 
     }
   }
@@ -149,48 +137,31 @@ export default function Videos() {
 
                 >
                   <Grid container spacing={2} justifyContent="center" alignItems="center">
-                    <Grid item xs={12} sm={8}>
-                      <Autocomplete
-                        disablePortal
-                        id="project"
-                        width="100%"
-                        options={allProblemStatements}
-                        inputValue={formValues.problemStatement}
-
-                        value={formValues.problemStatement}
-                        onInputChange={(event, newInputValue) => {
-                          setFormValues({
+                  <Grid item xs={12} sm={8}>
+                  <TextField
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="title"
+                        label="Problem Statements Title"
+                        name="title"
+                        autoComplete="title"
+                        autoFocus
+                        value={formValues.title}
+                        onChange={(event) => {
+                            console.log(event.target.value)
+                            setFormValues({
                             ...formValues,
-                            problemStatement: newInputValue
-                          });
+                            title: event.target.value
+                            });
                         }}
-                        renderInput={(params) => <TextField {...params} label="Project Name" />}
-                      />
-
+                    />
                     </Grid>
-                    <Grid item xs={12} sm={8}>
-                      <Autocomplete
-                        disablePortal
-                        id="group-name"
-                        options={groupOptions}
-                        inputValue={formValues.group}
-                        value={formValues.group}
-                        onInputChange={(event, newInputValue) => {
-                          setFormValues({
-                            ...formValues,
-                            group: newInputValue
-                          });
-                        }}
-                        renderInput={(params) => <TextField {...params} label="Group Name" />}
-                      />
-
-                    </Grid>
-
                     <Grid item xs={12} sm={8}>
                       <TextareaAutosize
                         minRows={6}
                         aria-label="maximum height"
-                        placeholder="Description of the Video"
+                        placeholder="Description of the ProblemStatement"
                         style={{ width: "100%" }}
                         onChange={(event) => {
                           console.log(event.target.value)
@@ -202,21 +173,42 @@ export default function Videos() {
                         value={formValues.description}
                       />
                     </Grid>
-
-                    <Grid item xs={12} sm={8}>
-                      <input accept="video/*" id="contained-button-file" ref={ref} multiple type="file" onChange={handleFile} />
-                    </Grid>
                     <Grid item xs={12} sm={8}>
                       <ReactTags
                         tags={tags}
                         inline
-                        width="300"
+                        classNames={{width100: 'width100'}}
+                        style={{ width: "100%", height:"50px" }}
                         delimiters={[Keys.TAB, Keys.SPACE, Keys.COMMA, Keys.ENTER]}
                         inputFieldPosition="top"
                         handleAddition={handleAddition}
                         handleDelete={handleDelete}
                       />
 
+                    </Grid>
+                    <Grid item xs={12} sm={8}>
+                    <TextField
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="title"
+                        label="Problem Statement Year"
+                        name="year"
+                        autoComplete="year"
+                        autoFocus
+                        value={formValues.year}
+                        onChange={(event) => {
+                            console.log(event.target.value)
+                            setFormValues({
+                            ...formValues,
+                            year: event.target.value
+                            });
+                        }}
+                    />
+                    </Grid>
+
+                    <Grid item xs={12} sm={8}>
+                      <input id="contained-button-file" ref={ref}  name='m' type="file" onChange={handleFile} multiple="multiple" />
                     </Grid>
                     <Grid item xs={12} sm={8}>
 
@@ -227,7 +219,7 @@ export default function Videos() {
                         size="medium"
                         onClick={handleSubmit}
                       >
-                        Upload Video
+                        Create New Problem Statement
                       </Button>
                     </Grid>
                   </Grid>

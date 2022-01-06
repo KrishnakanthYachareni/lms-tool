@@ -193,7 +193,7 @@ function DashboardContent() {
                                                             
                                                             })} */}
                                                             <TableCell key={row.id}>
-                                                                <a href={"/group/"+row.id} >{row['groupName']}</a>
+                                                                <a href={"dsd4/#/group/"+row.id} >{row['groupName']}</a>
                                                             </TableCell>
                                                             <TableCell key={row.id}>
                                                                 {row['year']}

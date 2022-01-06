@@ -87,10 +87,11 @@ router.post(
   async (req, res) => {
     
     console.log(req.body)
-    const { email, password } = req.body;
+    const { email, password,userType } = req.body;
   
       let user = await User.findOne({
-        email
+        email,
+        userType
       });
       if (!user)
         return res.status(400).json({
@@ -99,7 +100,7 @@ router.post(
 
       const isMatch = await bcrypt.compare(password, user.password);
       if (!isMatch)
-        return res.status(400).json({
+        return res.json({
           success: false,
           message: "Incorrect Password !"
         });
@@ -108,14 +109,6 @@ router.post(
        data: user,
        success: true
      })
-
-    
-    // } catch (e) {
-    //   console.error(e);
-    //   res.status(500).json({
-    //     message: "Server Error"
-    //   });
-    // }
   }
 );
 

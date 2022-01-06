@@ -14,7 +14,9 @@ import {
     tagsLoadingError,
     dashboardDataLoadingError,
     loadDashboardData,
-    dashboardDataLoaded
+    dashboardDataLoaded,
+    loadProblemStatementsAll,
+    problemStatementsLoadedAll
 } from './slice';
 
 
@@ -70,11 +72,14 @@ export function* checkUserLogin({ payload }) {
             })
         }
         const response =yield call(request, requestUrl, options)
-        console.log(response,response)
-        
+        console.log('print', response)
         if(response.success){
-            yield put(userLoginLoaded(response.data));
+            yield put(userLoginLoaded(response));
         }
+        else{
+            yield put(userLoginError(response))
+        }
+       
     }
     catch(err){
         yield put(userLoginError());
@@ -99,6 +104,31 @@ export function* getproblemStatements({ payload }) {
         
         if(response){
             yield put(problemStatementsLoaded(response));
+        }
+    }
+    catch(err){
+        yield put(problemStatementsLoadingError());
+
+    }
+}
+
+
+export function* getproblemStatementsAll({ payload }) {
+   
+    const requestUrl = `${API_ENDPOINT}/problemStatement/all`
+
+    try{
+        const options = {
+            mode: 'cors',
+            headers: {
+                'Content-Type': "application/json"
+            },
+            method : "GET"
+        }
+        const response =yield call(request, requestUrl, options)
+        
+        if(response){
+            yield put(problemStatementsLoadedAll(response));
         }
     }
     catch(err){
@@ -167,5 +197,7 @@ export default function* loginPageWatcher() {
     yield takeLatest(loadUserLogin.type, checkUserLogin);
     yield takeLatest(loadProblemStatements.type, getproblemStatements);
     yield takeLatest(loadTags.type, getTags);
+    yield takeLatest(loadProblemStatementsAll.type, getproblemStatementsAll);
+
 
 }
