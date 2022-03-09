@@ -12,7 +12,7 @@ export function* postPresentation({ payload }) {
     const {file,group,problemStatement,tags,description } = payload;
     let formData = new FormData()
    
-    formData.append('group', "group1")
+    formData.append('group', group)
     formData.append('problemStatement', problemStatement)
     formData.append('tags', tags)
     formData.append('description', description)

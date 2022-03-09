@@ -74,7 +74,7 @@ export default function GroupDetails() {
             <Box sx={{ display: 'flex' }}>
                 <CssBaseline />
                 <Header open={open} toggleDrawer={toggleDrawer} />
-                <Sider />
+                <Sider open={open} toggleDrawer={toggleDrawer} />
                 <Box
                     component="main"
                     sx={{
@@ -162,7 +162,7 @@ export default function GroupDetails() {
                                                                 {row.mediaType}
                                                             </TableCell>
                                                             <TableCell key={row.id}>
-                                                                {currentGroup?.problemStatement?.projectName || ''}
+                                                                {currentGroup?.problemStatement?.title || ''}
                                                             </TableCell>
                                                             <TableCell key={row.id}>
                                                                 {row['updatedAt']}
