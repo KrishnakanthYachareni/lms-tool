@@ -16,9 +16,6 @@ import { API_ENDPOINT } from '../../constants.js';
 import { Autocomplete, TextField } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import CloseIcon from '@mui/icons-material/Close';
-import PropTypes from 'prop-types';
-import Chip from "@material-ui/core/Chip";
-
 
 const Label = styled('label')`
   padding: 0 0 4px;
@@ -41,7 +38,7 @@ color: white;
 
 const columns = [
   { id: 'mediaType', label: 'File\u00a0Type', minWidth: 170 },
-  { id: 'problemStatement', label: 'Project\u00a0Name', minWidth: 100 },
+  // { id: 'problemStatement', label: 'Project\u00a0Name', minWidth: 100 },
   // {
   //   id: 'group',
   //   label: 'Team\u00a0Name',
@@ -53,14 +50,14 @@ const columns = [
     id: 'updatedAt',
     label: 'Last\u00a0Modified\u00a0Date',
     minWidth: 170,
-    align: 'right',
+    // align: 'right',
     format: (value) => value.toLocaleString('en-US'),
   },
   {
     id: "mediaUrl",
     label: 'Actions',
     minWidth: 170,
-    align: 'right',
+    align: 'center',
     format: (value) => value.toLocaleString('en-US'),
   }
 
@@ -158,10 +155,10 @@ export default function DashboardSummary() {
                 />
               )}
             />
-           
+
             <div style={{ display: 'flex', flexWrap: 'wrap' }}>
               {allTags && allTags.map((tag, index) => (
-                <FixedTag 
+                <FixedTag
                   className="tag"
                   onClick={() => handleTag(tag)}
                   key={index}
@@ -204,21 +201,24 @@ export default function DashboardSummary() {
                   .map((row) => {
                     return (
                       <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                        {columns.map((column) => {
-                          const value = row[column.id];
-                          return (
-                            <TableCell key={column.id} align={column.align}>
-                              {column.format && typeof value === 'number'
-                                ? column.format(value)
-                                : column.label == 'Actions' ? <a href={`${API_ENDPOINT}/uploads/${value}`} download="file" target="_blank"> Download </a> : value}
-                            </TableCell>
-                          );
-                        })}
+                      
+                        <TableCell key={row.id}>
+                          {row.mediaType}
+                        </TableCell>
+                        {/* <TableCell key={row.id}>
+                          {row?.group?.problemStatement?.title || ''}
+                        </TableCell> */}
+                        <TableCell key={row.id}>
+                          {row['updatedAt']}
+                        </TableCell>
+                        <TableCell key={row.id} align="center">
+                        <a href={`${API_ENDPOINT}/uploads/${row.mediaUrl}`} download="file" target="_blank"> Download </a>
+                        </TableCell>
+                        </TableRow>
 
-                      </TableRow>
-                    );
+                        );
                   })}
-              </TableBody>
+                      </TableBody>
             </Table>
           </TableContainer>
 

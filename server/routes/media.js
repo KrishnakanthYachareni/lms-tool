@@ -4,7 +4,7 @@ var multer = require('multer');
 const Media = require("../models/media");
 const Tag = require("../models/tags");
 const Group = require("../models/group");
-
+const ProblemStatement = require("../models/problemStatements")
 
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -69,11 +69,17 @@ router.post("/search", (req, res) => {
     let { search } = req.body
     console.log(search)
 
-    Media.find({ "tags": { "$in": search } })
-        .then(data => {
-            console.log(data)
-            res.send(data)
-        })
+    Media.find({ "tags": { "$in": search } }).populate({
+        path: 'group',
+        popualte:{
+            path: 'problemStatement',
+            model: 'problemStatements'
+        }
+    }).exec((err, data) => {
+        if (err) console.log(err);
+
+        return res.send(data)
+    })
 });
 
 router.post('/group/', function (req, res, next) {

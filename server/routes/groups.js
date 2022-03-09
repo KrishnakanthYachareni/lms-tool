@@ -43,7 +43,7 @@ router.post('/', async function (req, res, next) {
     group.save().then(data => {
         //make users in team-members hasProject true
         console.log("Saving team members has Project to null")
-        // User.updateMany({ _id: { "$in": teamMemberIds } }, { "$set": { hasTeam: true } }, { multi: true }).then(data=> console.log(data))
+        User.updateMany({ _id: { "$in": teamMemberIds } }, { "$set": { hasTeam: true } }, { multi: true }).then(data=> console.log(data))
         return res.send(data)
     }).catch(err => {
         console.log('error')
