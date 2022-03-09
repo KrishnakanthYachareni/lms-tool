@@ -30,9 +30,8 @@ router.post('/', async function (req, res, next) {
     const { name, problemStatement, term, year, teamMembers } = req.body
 
     const teamMemberIds = await User.find().where('email').in(teamMembers).exec();
-    const problemStatementObj = await ProblemStatement.find({title: problemStatement});
+    const problemStatementObj = await ProblemStatement.findOne({title: problemStatement});
 
-    console.log(teamMemberIds)
     let group = new Group({
         name,
         term,
@@ -43,10 +42,10 @@ router.post('/', async function (req, res, next) {
     group.save().then(data => {
         //make users in team-members hasProject true
         console.log("Saving team members has Project to null")
-        User.updateMany({ _id: { "$in": teamMemberIds } }, { "$set": { hasTeam: true } }, { multi: true }).then(data=> console.log(data))
+        // User.updateMany({ _id: { "$in": teamMemberIds } }, { "$set": { hasTeam: true } }, { multi: true }).then(data=> console.log(data))
         return res.send(data)
     }).catch(err => {
-        console.log('error')
+        console.log('error',err)
         return res.status(400).send({ "error": err })
     })
 

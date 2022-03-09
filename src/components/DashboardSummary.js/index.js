@@ -63,18 +63,6 @@ const columns = [
 
 ];
 
-function Tag(props) {
-  const { label, onDelete, ...other } = props;
-  return (
-    <div {...other}>
-      <span>{label}</span>
-      <CloseIcon onClick={onDelete} />
-    </div>
-  );
-}
-
-
-
 
 
 export default function DashboardSummary() {

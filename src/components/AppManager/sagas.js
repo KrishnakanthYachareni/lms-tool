@@ -253,9 +253,9 @@ export function* getGroups() {
 
 
 export function* createGroup({ payload }) {
-    const { name, year, term, teamMembers } = payload;
+    const { name, year, term, teamMembers,problemStatement } = payload;
     const requestUrl = `${API_ENDPOINT}/group`
-
+    console.log(payload)
     try {
         const options = {
             mode: 'cors',
@@ -267,7 +267,8 @@ export function* createGroup({ payload }) {
                 name,
                 year,
                 term,
-                teamMembers
+                teamMembers,
+                problemStatement
             })
         }
         const response = yield call(request, requestUrl, options)
