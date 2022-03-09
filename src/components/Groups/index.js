@@ -200,7 +200,7 @@ export default function Group() {
                                                             
                                                             })} */}
                                                             <TableCell key={row.id}>
-                                                                <a href={"/dsd4/#/group?name=" + row.name} >{row['name']}</a>
+                                                                <a href={"/dsd4/#/group?name=" + row._id} >{row['name']}</a>
                                                             </TableCell>
                                                             <TableCell key={row.id}>
                                                                 {row['year']}

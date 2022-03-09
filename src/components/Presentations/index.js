@@ -23,7 +23,6 @@ import { selectUploadingError } from './selectors.js';
 
 const Keys = {
   TAB: 9,
-  SPACE: 32,
   COMMA: 188,
   ENTER: 13
 };

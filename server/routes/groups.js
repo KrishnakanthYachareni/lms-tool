@@ -5,10 +5,10 @@ const Media = require("../models/media");
 const ProblemStatement = require('../models/problemStatements');
 const User = require('../models/users');
 
-router.get('/:name', function (req, res, next) {
-    const { name } = req.params
+router.get('/:id/', function (req, res, next) {
+    const { id } = req.params
     Group.findOne({
-        name: name
+        _id: id
     }).populate('teamMembers').populate('problemStatement').exec((err, data) => {
         if (err) console.log(err);
 
@@ -17,7 +17,6 @@ router.get('/:name', function (req, res, next) {
 });
 
 router.get('/', function (req, res, next) {
-    console.log('get groups')
     Group.find({
     }).populate('teamMembers').populate('problemStatement').exec((err, data) => {
         if (err) console.log(err);

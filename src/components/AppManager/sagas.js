@@ -253,7 +253,7 @@ export function* getGroups() {
 
 
 export function* createGroup({ payload }) {
-    const { name, year, term, teamMembers,problemStatement } = payload;
+    const { name, year, term, teamMembers, problemStatement } = payload;
     const requestUrl = `${API_ENDPOINT}/group`
     console.log(payload)
     try {
@@ -289,8 +289,8 @@ export function* createGroup({ payload }) {
 
 
 export function* getCurrentGroup({ payload }) {
-    const { groupName } = payload
-    const requestUrl = `${API_ENDPOINT}/group/${groupName}`
+    const { id } = payload
+    const requestUrl = `${API_ENDPOINT}/group/${id}/`
 
     try {
         const options = {
@@ -334,7 +334,7 @@ export function* getCurrentGroupMedia({ payload }) {
             },
             method: "POST",
             body: JSON.stringify({
-               id
+                id
             })
         }
         const response = yield call(request, requestUrl, options)

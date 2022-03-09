@@ -55,19 +55,19 @@ export default function GroupDetails() {
     };
     const dispatch = useDispatch()
 
-    const params = useParams();
-    console.log(params, 'params')
-
-    React.useEffect(() => {
-        dispatch(loadCurrentGroup({ groupName: "test" }))
-    }, [])
+    const id = window.location.hash.split("=")[1]
+   
     const currentGroup = useSelector(selectCurrentGroup)
-
     React.useEffect(() => {
-        dispatch(loadCurrentGroupMedia({ id: currentGroup._id }))
+        dispatch(loadCurrentGroup({ id: id }))
+
+    }, [])
+    React.useEffect(() => {
+        if(currentGroup){
+            dispatch(loadCurrentGroupMedia({ id: currentGroup._id }))
+        }
     }, [currentGroup])
     const currentGroupMedia = useSelector(selectCurrentGroupMedia)
-    console.log(currentGroupMedia)
 
     return (
         <ThemeProvider theme={mdTheme}>
