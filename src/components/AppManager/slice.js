@@ -7,25 +7,58 @@ export const initialState = {
         error: false
     },
     problemStatements: {
-        data:[],
+        data: [],
         loading: false,
         error: false
     },
     problemStatementsAll: {
-        data:[],
+        data: [],
         loading: false,
         error: false
     },
-    tags:{
-        data:[],
+    tags: {
+        data: [],
         loading: false,
         error: false
     },
-    dashboardData :{
-        data:[],
+    dashboardData: {
+        data: [],
         loading: false,
         error: false
     },
+    students: {
+        data: [],
+        loading: false,
+        error: false
+    },
+    groups: {
+        data: [],
+        loading: false,
+        error: false,
+    },
+    createGroup :{
+        loading: false,
+        error: false,
+    },
+    currentGroup: {
+        data: {},
+        loading: false,
+        error: false,
+    },
+    alert: {
+        data: {
+            message: "",
+            type: false,
+            hasAlert: false
+        },
+        error: false,
+        loading: false
+    },
+    currentGroupMedia :{
+        data: [],
+        loading: false,
+        error: false,
+    }
 }
 
 const loginSlice = createSlice({
@@ -38,14 +71,12 @@ const loginSlice = createSlice({
         },
 
         userLoginLoaded(state, { payload }) {
-            console.log('check123',payload)
             state.user.data = payload.data
             state.user.loading = false;
             state.user.error = false
         },
 
         userLoginError(state) {
-            console.log('state.data')
             state.user.loading = false;
             state.user.error = true
         },
@@ -65,7 +96,7 @@ const loginSlice = createSlice({
             state.user.loading = true;
             state.user.error = true
         },
-        setUserData(state,{payload}){
+        setUserData(state, { payload }) {
             state.user.data = payload;
             state.user.loading = false;
             state.user.error = false;
@@ -77,7 +108,6 @@ const loginSlice = createSlice({
         },
 
         problemStatementsLoaded(state, { payload }) {
-            console.log('check123',payload)
             state.problemStatements.data = payload
             state.problemStatements.loading = false;
             state.problemStatements.error = false
@@ -137,6 +167,99 @@ const loginSlice = createSlice({
             state.dashboardData.loading = true;
             state.dashboardData.error = true
         },
+
+        loadStudents(state) {
+            state.students.loading = true;
+            state.students.error = false
+        },
+
+        studentsLoaded(state, { payload }) {
+            console.log('here')
+            state.students.data = payload
+            state.students.loading = false;
+            state.students.error = false
+        },
+
+        studentsLoadingError(state) {
+            state.students.loading = true;
+            state.students.error = true
+        },
+
+        loadGroups(state) {
+            state.groups.loading = true;
+            state.groups.error = false
+        },
+
+        groupsLoaded(state, { payload }) {
+            state.groups.data = payload
+            state.groups.loading = false;
+            state.groups.error = false
+        },
+
+        groupsLoadingError(state) {
+            state.groups.loading = true;
+            state.groups.error = true
+        },
+
+        saveGroup(state) {
+            state.createGroup.loading = true;
+            state.createGroup.error = false
+        },
+        saveGroupLoaded(state){
+            state.createGroup.loading = false;
+            state.createGroup.error = false
+        },
+        saveGroupError (state) {
+            state.createGroup.loading = false;
+            state.createGroup.error = true
+        },
+
+        loadCurrentGroup(state) {
+            state.currentGroup.loading = true;
+            state.currentGroup.error = false
+        },
+
+        currentGroupLoaded(state, { payload }) {
+            state.currentGroup.data = payload
+            state.currentGroup.loading = false;
+            state.currentGroup.error = false
+        },
+
+        currentGroupLoadingError(state) {
+            state.currentGroup.loading = true;
+            state.currentGroup.error = true
+        },
+        createAlert(state) {
+            console.log('in here')
+            state.alert.loading = true;
+            state.alert.error = false
+        },
+
+        createAlertLoadingError(state) {
+            state.alert.loading = true;
+            state.alert.error = true
+        },
+        createAlertLoaded(state, { payload }) {
+            state.alert.data = payload;
+            state.alert.error = false;
+            state.alert.loading = false;
+        },
+        loadCurrentGroupMedia(state) {
+            state.currentGroupMedia.loading = true;
+            state.currentGroupMedia.error = false
+        },
+
+        currentGroupMediaLoaded(state, { payload }) {
+            console.log(payload)
+            state.currentGroupMedia.data = payload
+            state.currentGroupMedia.loading = false;
+            state.currentGroupMedia.error = false
+        },
+
+        currentGroupMediaLoadingError(state) {
+            state.currentGroupMedia.loading = true;
+            state.currentGroupMedia.error = true
+        },
     }
 })
 
@@ -157,8 +280,25 @@ export const {
     loadDashboardData,
     loadProblemStatementsAll,
     problemStatementsLoadedAll,
-    problemStatementsLoadingErrorAll
-    
+    problemStatementsLoadingErrorAll,
+    studentsLoaded,
+    studentsLoadingError,
+    loadStudents,
+    loadGroups,
+    groupsLoaded,
+    groupsLoadingError,
+    saveGroup,
+    saveGroupError,
+    saveGroupLoaded,
+    currentGroupLoaded,
+    loadCurrentGroup,
+    currentGroupLoadingError,
+    createAlert,
+    createAlertLoaded,
+    createAlertLoadingError,
+    loadCurrentGroupMedia,
+    currentGroupMediaLoaded,
+    currentGroupMediaLoadingError
 } = loginSlice.actions
 
 export default loginSlice.reducer;

@@ -7,6 +7,9 @@ import PresentationReducer from "../Presentations/slice";
 import PresentationSaga from "../Presentations/sagas";
 import ProblemStatementReducer from "../ProblemStatements/slice";
 import ProblemStatementSaga from "../ProblemStatements/sagas";
+
+
+
 function AppManager(){
     useInjectReducer({key: 'appManager', reducer: reducer})
     useInjectSaga({key:"appManager", saga: saga})
@@ -17,8 +20,9 @@ function AppManager(){
     useInjectReducer({key: 'presentations', reducer: PresentationReducer})
     useInjectSaga({key:"presentations", saga: PresentationSaga})
 
-    useInjectReducer({key: 'problemstatements', reducer: ProblemStatementReducer})
-    useInjectSaga({key:"problemstatements", saga: ProblemStatementSaga})
+    useInjectReducer({key: 'problemStatementManager', reducer: ProblemStatementReducer})
+    useInjectSaga({key:"problemStatementManager", saga: ProblemStatementSaga})
+
 
     return null;
 }

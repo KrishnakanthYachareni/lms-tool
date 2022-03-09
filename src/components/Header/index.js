@@ -11,24 +11,10 @@ import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectUserInfo } from '../AppManager/selectors';
 import { useHistory } from 'react-router';
 import { setUserData } from '../AppManager/slice'
-function Copyright(props) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
 
 const drawerWidth = 240;
-
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
 })(({ theme, open }) => ({
@@ -76,7 +62,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 export default function Header({open,toggleDrawer}) {
   
-  console.log(open)
+  console.log(open,'in header')
   const [anchorEl, setAnchorEl] = React.useState(null);
   const ProfileOpen = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -105,7 +91,10 @@ export default function Header({open,toggleDrawer}) {
           edge="start"
           color="inherit"
           aria-label="open drawer"
-          onClick={toggleDrawer}
+          onClick={()=>{
+            console.log('here')
+            toggleDrawer()
+          }}
           sx={{
             marginRight: '36px',
             ...(open && { display: 'none' }),

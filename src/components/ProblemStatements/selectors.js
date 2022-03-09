@@ -1,13 +1,11 @@
 import { createSelector } from "reselect";
 import initialState from './slice'
 
-const selectProblemStatementManager = state => state.problemStatementsManager || initialState
+const selectProblemStatementManager = state => state.problemStatementManager || initialState
 
-
-console.group(selectProblemStatementManager)
 const selectUploadingError = createSelector(
     [selectProblemStatementManager],
-    problemStatementsManager => problemStatementsManager.problemStatement
+    problemStatementManagerState => problemStatementManagerState.problemStatement
 )
 
 

@@ -1,9 +1,9 @@
-const { tabScrollButtonClasses } = require('@mui/material');
 var express = require('express');
 var router = express.Router();
-var multer = require('multer')
+var multer = require('multer');
 const Media = require("../models/media");
 const Tag = require("../models/tags");
+const Group = require("../models/group");
 
 
 var storage = multer.diskStorage({
@@ -13,7 +13,6 @@ var storage = multer.diskStorage({
     filename: function (req, file, cb) {
         var now = new Date().toISOString().replace(/:/g, '-')
         var fileName = now + file.originalname
-        console.log(fileName)
         cb(null, fileName)
     }
 })
@@ -21,9 +20,9 @@ var storage = multer.diskStorage({
 var upload = multer({ storage: storage })
 
 
-router.post("/",  upload.single('file'),(req, res) => {
+router.post("/",  upload.single('file'),async(req, res) => {
     console.log(req.body,)
-    let { tags, description, problemStatement, group, mediaType } = req.body
+    let { tags, description,  group, mediaType } = req.body
 	console.log(tags)
 
 	let tagsList = []
@@ -42,12 +41,15 @@ router.post("/",  upload.single('file'),(req, res) => {
         .catch(err => {
             console.log("tags creation error")
         })
+    
+    const groupObj = await Group.findOne({name: group})
+
+    console.log(groupObj)
 
     let media = new Media({
         tags: tagsList,
         description,
-        problemStatement,
-        group,
+        group: groupObj,
         mediaUrl: req.file.filename,
         mediaType: mediaType
     });
@@ -73,5 +75,15 @@ router.post("/search", (req, res) => {
             res.send(data)
         })
 });
+
+router.post('/group/', function (req, res, next) {
+    const { id } = req.body
+    Media.find({
+        group:id
+    }).then(( data) => {
+        console.log(data)
+        return res.send(data)
+    })
+})
 
 module.exports = router;

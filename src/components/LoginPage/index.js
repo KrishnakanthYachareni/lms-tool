@@ -17,7 +17,8 @@ import { loadProblemStatements, loadUserLogin, userLoginError } from '../AppMana
 import { useSelector } from 'react-redux';
 import { selectUserInfo, selectUserInfoError } from '../AppManager/selectors';
 import { useHistory } from 'react-router';
-
+import { createAlert } from '../AppManager/slice';
+import Image from './home.jpg'
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -57,6 +58,7 @@ export default function LoginPage() {
     console.log('userinfo', userInfo)
     if (Object.keys(userInfo).length !== 0 && userInfo) {
       dispatch(loadProblemStatements())
+      localStorage.setItem('userInfo', JSON.stringify(userInfo))
       history.push('/dashboard')
     }
   }, [userInfo])
@@ -64,7 +66,11 @@ export default function LoginPage() {
   
   useEffect(()=>{
     if(userInfoError){
-      alert("Invalid Credentials, please try again!")
+      dispatch(createAlert({
+        message:"Invalid User Credentials",
+        hasAlert: true,
+        type:"error"
+      }))
       setUsername('')
       setPassword('')
     }
@@ -80,8 +86,9 @@ export default function LoginPage() {
           sm={4}
           md={7}
           sx={{
-            backgroundImage: 'url(https://source.unsplash.com/random)',
+            // backgroundImage: 'url(https://source.unsplash.com/random)',
             backgroundRepeat: 'no-repeat',
+            backgroundImage: `url(${Image})`,
             backgroundColor: (t) =>
               t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
             backgroundSize: 'cover',

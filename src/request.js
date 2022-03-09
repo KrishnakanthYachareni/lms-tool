@@ -1,5 +1,4 @@
 function parseJson(response){
-    console.log('response', response)
     return response.json()
 }
 

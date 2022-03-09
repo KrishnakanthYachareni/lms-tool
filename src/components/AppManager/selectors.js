@@ -35,5 +35,48 @@ const selectDashboardData = createSelector(
     appManagerState => appManagerState.dashboardData.data
 )
 
+const selectStudents = createSelector(
+    [selectappManager],
+    appManagerState => appManagerState.students.data
+)
 
-export {selectUserInfo, selectProblemStatements,selectTags,selectDashboardData,selectUserInfoError,selectProblemStatementsAll}
+const selectGroups = createSelector(
+    [selectappManager],
+    appManagerState => appManagerState.groups.data
+)
+
+const selectCurrentGroup = createSelector(
+    [selectappManager],
+    appManagerState => appManagerState.currentGroup.data
+)
+
+const selectCreateGroup = createSelector(
+    [selectappManager],
+    appManagerState => appManagerState.createGroup
+)
+
+
+const selectAlert = createSelector(
+    [selectappManager],
+    appManagerState => appManagerState.alert.data
+)
+
+const selectCurrentGroupMedia = createSelector(
+    [selectappManager],
+    appManagerState => appManagerState.currentGroupMedia.data
+)
+
+export { 
+    selectUserInfo, 
+    selectProblemStatements, 
+    selectTags, 
+    selectDashboardData, 
+    selectUserInfoError, 
+    selectProblemStatementsAll, 
+    selectStudents,
+    selectGroups,
+    selectCurrentGroup,
+    selectCreateGroup,
+    selectAlert,
+    selectCurrentGroupMedia
+}

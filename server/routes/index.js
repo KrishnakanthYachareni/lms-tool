@@ -1,7 +1,6 @@
 var express = require('express');
 var router = express.Router();
 var multer = require('multer')
-const Video = require("../models/admin");
 
 
 var storage = multer.diskStorage({

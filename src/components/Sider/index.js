@@ -1,36 +1,17 @@
 import * as React from 'react';
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
 import MuiDrawer from '@mui/material/Drawer';
-import Box from '@mui/material/Box';
 import MuiAppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
-import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import { mainListItems, secondaryListItems } from '../../menuList.js';
+import { useSelector } from 'react-redux';
+import { selectUserInfo } from '../AppManager/selectors.js';
 
 const drawerWidth = 240;
-
-const AppBar = styled(MuiAppBar, {
-    shouldForwardProp: (prop) => prop !== 'open',
-})(({ theme, open }) => ({
-    zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(['width', 'margin'], {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
-    }),
-    ...(open && {
-        marginLeft: drawerWidth,
-        width: `calc(100% - ${drawerWidth}px)`,
-        transition: theme.transitions.create(['width', 'margin'], {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.enteringScreen,
-        }),
-    }),
-}));
 
 const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
     ({ theme, open }) => ({
@@ -58,20 +39,10 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
     }),
 );
 
-export default function Sider() {
-    console.log('dashboard')
-    const [open, setOpen] = React.useState(true);
-    const toggleDrawer = () => {
-        setOpen(!open);
-    };
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const ProfileOpen = Boolean(anchorEl);
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
+export default function Sider({ open, toggleDrawer }) {
+    console.log(toggleDrawer, open)
+    const currentPath = window.location.pathname + '' + window.location.hash
+    const userinfo = useSelector(selectUserInfo)
     return (
         <Drawer variant="permanent" open={open}>
             <Toolbar
@@ -82,15 +53,17 @@ export default function Sider() {
                     px: [1],
                 }}
             >
-                <IconButton onClick={toggleDrawer}>
+                <IconButton onClick={() => {
+                    toggleDrawer()
+                }}>
                     <ChevronLeftIcon />
                 </IconButton>
             </Toolbar>
             <Divider />
 
-            <List>{mainListItems}</List>
+            <List>{mainListItems(currentPath)}</List>
             <Divider />
-            <List>{secondaryListItems}</List>
+            {userinfo&& userinfo.userType !== 'sponsor' && <List>{secondaryListItems(currentPath)}</List>}
         </Drawer>
     );
 }

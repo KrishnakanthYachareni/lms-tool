@@ -11,9 +11,18 @@ import PersonSharpIcon from '@mui/icons-material/PersonSharp';
 import VideoLibrarySharpIcon from '@mui/icons-material/VideoLibrarySharp';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 
-export const mainListItems = (
+const paths = {
+    dashboard: '/dsd4/#/dashboard',
+    groups : '/dsd4/#/groups',
+    templates: '/dsd4/#/templates',
+    problemStatements: '/dsd4/#/problem-statements',
+    videos:  '/dsd4/#/video',
+    presentations:  '/dsd4/#/presentation',
+}
+
+export const mainListItems =(currentPath)=> (
     <div>
-        <ListItem  button component="a" href="/dsd4/#/dashboard">
+        <ListItem  button component="a" href="/dsd4/#/dashboard" selected={paths.dashboard === currentPath}>
             <ListItemIcon>
                 <DashboardIcon />
             </ListItemIcon>
@@ -25,19 +34,19 @@ export const mainListItems = (
             </ListItemIcon>
             <ListItemText primary="Students" />
         </ListItem>
-        <ListItem  button component="a" href="/dsd4/#/groups">
+        <ListItem  button component="a" href="/dsd4/#/groups"  selected={paths.groups === currentPath}>
             <ListItemIcon>
                 <PeopleIcon />
             </ListItemIcon>
             <ListItemText primary="Groups" />
         </ListItem>
-        <ListItem button>
+        <ListItem button  selected={paths.templates === currentPath}>
             <ListItemIcon>
                 <AssignmentIcon />
             </ListItemIcon>
             <ListItemText primary="Templates" />
         </ListItem>
-        <ListItem button component="a" href="/dsd4/#/problem-statements">
+        <ListItem button component="a" href="/dsd4/#/problem-statements"  selected={paths.problemStatements === currentPath}>
             <ListItemIcon>
                 <LayersIcon />
             </ListItemIcon>
@@ -52,16 +61,16 @@ export const mainListItems = (
     </div>
 );
 
-export const secondaryListItems = (
-    <div>
+export const secondaryListItems =(currentPath)=> (
+   <div>
         <ListSubheader inset>Upload Student's Content</ListSubheader>
-        <ListItem button component="a" href="/dsd4/#/video">
+        <ListItem button component="a" href="/dsd4/#/video"  selected={paths.videos === currentPath}>
             <ListItemIcon >
                 <VideoLibrarySharpIcon />
             </ListItemIcon>
             <ListItemText primary="Upload Videos" />
         </ListItem>
-        <ListItem button component="a" href="/dsd4/#/presentation">
+        <ListItem button component="a" href="/dsd4/#/presentation"  selected={paths.presentations === currentPath}>
             <ListItemIcon>
                 <PostAddIcon />
             </ListItemIcon>

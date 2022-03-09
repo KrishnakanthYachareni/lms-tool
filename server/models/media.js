@@ -1,13 +1,10 @@
 const mongoose = require("mongoose");
+const  Group =require( './group')
 
 const MediaSchema = mongoose.Schema({
-    problemStatement: {
-        type: String,
-        required: true
-    },
+    
     group: {
-        type: String,
-        required: true
+        type: mongoose.Schema.Types.ObjectId, ref: "group",
     },
     description: {
         type: String,

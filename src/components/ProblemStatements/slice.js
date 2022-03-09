@@ -8,7 +8,7 @@ export const initialState = {
 }
 
 const problemStatementSlice = createSlice({
-    name: "problemStatements",
+    name: "problemStatementManager",
     initialState,
     reducers: {
        uploadProblemStatement (state){
@@ -17,6 +17,7 @@ const problemStatementSlice = createSlice({
        },
        problemStatementUploaded (state){
         state.problemStatement.saving= false
+        state.problemStatement.error= false;
        },
        problemStatementUploadingError(state){
         state.problemStatement.error= true;

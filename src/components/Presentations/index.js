@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {  createTheme, ThemeProvider } from '@mui/material/styles';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -9,9 +9,9 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import { useDispatch } from 'react-redux';
-import { loadProblemStatements } from '../AppManager/slice'
+import { loadGroups, loadProblemStatements } from '../AppManager/slice'
 import { useSelector } from 'react-redux';
-import { selectProblemStatements } from '../AppManager/selectors';
+import { selectGroups, selectProblemStatements } from '../AppManager/selectors';
 import Autocomplete from '@mui/material/Autocomplete';
 import Paper from '@mui/material/Paper';
 import Container from '@mui/material/Container';
@@ -39,9 +39,6 @@ const defaultValues = {
 };
 
 
-const groupOptions = [
-  "group1", "group2"
-]
 
 export default function Presentations() {
   const [open, setOpen] = React.useState(true);
@@ -50,20 +47,20 @@ export default function Presentations() {
   };
   const [file, setFile] = React.useState(null)
   const dispatch = useDispatch()
-  const allProblemStatements = useSelector(selectProblemStatements)
 
 
-  
+
   const [formValues, setFormValues] = React.useState(defaultValues);
   const [tags, setTags] = React.useState(defaultValues.tags)
 
 
   const uploadingError = useSelector(selectUploadingError)
   const ref = React.useRef();
-
+  const groups = useSelector(selectGroups)
   React.useEffect(() => {
-    dispatch(loadProblemStatements())
+    dispatch(loadGroups())
   }, [])
+
 
   React.useEffect(() => {
     console.log(formValues)
@@ -72,29 +69,28 @@ export default function Presentations() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-	 let tagsObject =[];
-   tags.map(item=>{
-    tagsObject.push(item.text)
-  })
+    let tagsObject = [];
+    tags.map(item => {
+      tagsObject.push(item.text)
+    })
     dispatch(uploadPresentation({
       file: file,
-      problemStatement: formValues.problemStatement,
       group: formValues.group,
       description: formValues.description,
       tags: tagsObject
     }))
     console.log(uploadingError)
-    if(uploadingError){
+    if (uploadingError) {
       alert("Error uploadig Presentation")
     }
-    if(!uploadingError){
+    if (!uploadingError) {
       alert("Upload Successfull")
       setFormValues(defaultValues)
-      ref.current.value=""
+      ref.current.value = ""
       setTags([])
     }
 
-    
+
   };
 
   const handleFile = (event) => {
@@ -119,7 +115,7 @@ export default function Presentations() {
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
         <Header open={open} toggleDrawer={toggleDrawer} />
-        <Sider />
+        <Sider open={open} toggleDrawer={toggleDrawer} />        
         <Box
           component="main"
           sx={{
@@ -147,44 +143,29 @@ export default function Presentations() {
                     height: "100%",
                   }}
 
-                >
+                >``
                   <Grid container spacing={2} justifyContent="center" alignItems="center">
-                    <Grid item xs={12} sm={8}>
-                      <Autocomplete
-                        disablePortal
-                        id="project"
-                        width="100%"
-                        options={allProblemStatements}
-                        inputValue={formValues.problemStatement}
 
-                        value={formValues.problemStatement}
-                        onInputChange={(event, newInputValue) => {
-                          setFormValues({
-                            ...formValues,
-                            problemStatement: newInputValue
-                          });
-                        }}
-                        renderInput={(params) => <TextField {...params} label="Project Name" />}
-                      />
 
-                    </Grid>
                     <Grid item xs={12} sm={8}>
                       <Autocomplete
                         disablePortal
                         id="group-name"
-                        options={groupOptions}
+                        options={groups}
+                        getOptionLabel={(option) => option.name || ""}
                         inputValue={formValues.group}
                         value={formValues.group}
-                        onInputChange={(event, newInputValue) => {
+                        onChange={(event, newInputValue) => {
                           setFormValues({
                             ...formValues,
-                            group: newInputValue
+                            group: newInputValue?.name || ""
                           });
                         }}
-                        renderInput={(params) => <TextField {...params} label="Group Name" />}
+                        renderInput={(params) => <TextField {...params} label="Select a Group" />}
                       />
 
                     </Grid>
+
 
                     <Grid item xs={12} sm={8}>
                       <TextareaAutosize

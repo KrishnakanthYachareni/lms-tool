@@ -10,7 +10,7 @@ var usersRouter = require('./routes/users');
 var mediaRouter = require("./routes/media")
 var problemStatementsRouter = require("./routes/problemStatements")
 var tagRouter = require("./routes/tags")
-
+var groupRouter = require("./routes/groups")
 
 var app = express();
 const InitiateMongoServer = require("./db");
@@ -27,7 +27,6 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-console.log(__dirname)
 app.use(express.static(path.join(__dirname, 'uploads')));
 
 app.use('/', indexRouter);
@@ -36,6 +35,8 @@ app.use('/', usersRouter);
 app.use('/media', mediaRouter);
 app.use('/problemStatement', problemStatementsRouter);
 app.use('/tag', tagRouter);
+app.use('/group', groupRouter);
+
 
 app.use('/uploads', express.static('uploads'));
 

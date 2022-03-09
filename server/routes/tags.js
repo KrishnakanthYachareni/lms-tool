@@ -4,7 +4,7 @@ const Tag = require("../models/tags");
 
 router.get('/', function(req, res, next) {
     Tag.find({}).then(data =>{
-        return res.send(data)
+        return res.send(data.map(item=>item.name))
     })
 });
 

@@ -9,9 +9,8 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import { useDispatch } from 'react-redux';
-import { loadProblemStatements } from '../AppManager/slice'
 import { useSelector } from 'react-redux';
-import { selectProblemStatements } from '../AppManager/selectors';
+import { selectGroups } from '../AppManager/selectors';
 import Autocomplete from '@mui/material/Autocomplete';
 import Paper from '@mui/material/Paper';
 import Container from '@mui/material/Container';
@@ -19,11 +18,11 @@ import TextareaAutosize from '@mui/material/TextareaAutosize';
 import { WithContext as ReactTags } from 'react-tag-input';
 import { uploadVideo } from './slice.js';
 import { selectUploadingError } from './selectors.js';
+import { loadGroups } from '../AppManager/slice.js';
 
 
 const Keys = {
   TAB: 9,
-  SPACE: 32,
   COMMA: 188,
   ENTER: 13
 };
@@ -32,16 +31,10 @@ const Keys = {
 const mdTheme = createTheme();
 
 const defaultValues = {
-  problemStatement: "",
   group: "",
   description: "",
   tags: []
 };
-
-
-const groupOptions = [
-  "group1", "group2"
-]
 
 export default function Videos() {
   const [open, setOpen] = React.useState(true);
@@ -50,19 +43,14 @@ export default function Videos() {
   };
   const [file, setFile] = React.useState(null)
   const dispatch = useDispatch()
-  const allProblemStatements = useSelector(selectProblemStatements)
-
-
-  
   const [formValues, setFormValues] = React.useState(defaultValues);
   const [tags, setTags] = React.useState(defaultValues.tags)
 
-
   const uploadingError = useSelector(selectUploadingError)
   const ref = React.useRef();
-
+  const groups = useSelector(selectGroups)
   React.useEffect(() => {
-    dispatch(loadProblemStatements())
+    dispatch(loadGroups())
   }, [])
 
   React.useEffect(() => {
@@ -78,12 +66,10 @@ export default function Videos() {
     })
     dispatch(uploadVideo({
       file: file,
-      problemStatement: formValues.problemStatement,
       group: formValues.group,
       description: formValues.description,
       tags: tagsObject
     }))
-    console.log(uploadingError)
     if(uploadingError){
       alert("Error uploadig video")
     }
@@ -98,7 +84,6 @@ export default function Videos() {
   };
 
   const handleFile = (event) => {
-    console.log(event.target.files)
     if (event.target.files.length > 0) {
       setFile(event.target.files[0])
 
@@ -106,7 +91,6 @@ export default function Videos() {
   }
 
   const handleAddition = (tag) => {
-    console.log(tag)
     setTags([...tags, tag])
   }
 
@@ -119,7 +103,7 @@ export default function Videos() {
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
         <Header open={open} toggleDrawer={toggleDrawer} />
-        <Sider />
+        <Sider open={open} toggleDrawer={toggleDrawer} />
         <Box
           component="main"
           sx={{
@@ -149,39 +133,22 @@ export default function Videos() {
 
                 >
                   <Grid container spacing={2} justifyContent="center" alignItems="center">
-                    <Grid item xs={12} sm={8}>
-                      <Autocomplete
-                        disablePortal
-                        id="project"
-                        width="100%"
-                        options={allProblemStatements}
-                        inputValue={formValues.problemStatement}
-
-                        value={formValues.problemStatement}
-                        onInputChange={(event, newInputValue) => {
-                          setFormValues({
-                            ...formValues,
-                            problemStatement: newInputValue
-                          });
-                        }}
-                        renderInput={(params) => <TextField {...params} label="Project Name" />}
-                      />
-
-                    </Grid>
+                   
                     <Grid item xs={12} sm={8}>
                       <Autocomplete
                         disablePortal
                         id="group-name"
-                        options={groupOptions}
+                        options={groups}
+                        getOptionLabel={(option) => option.name || ""}
                         inputValue={formValues.group}
                         value={formValues.group}
-                        onInputChange={(event, newInputValue) => {
+                        onChange={(event, newInputValue) => {
                           setFormValues({
                             ...formValues,
-                            group: newInputValue
+                            group: newInputValue?.name || ""
                           });
                         }}
-                        renderInput={(params) => <TextField {...params} label="Group Name" />}
+                        renderInput={(params) => <TextField {...params} label="Select a Group" />}
                       />
 
                     </Grid>
@@ -193,7 +160,6 @@ export default function Videos() {
                         placeholder="Description of the Video"
                         style={{ width: "100%" }}
                         onChange={(event) => {
-                          console.log(event.target.value)
                           setFormValues({
                             ...formValues,
                             description: event.target.value

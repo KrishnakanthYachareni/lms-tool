@@ -26,4 +26,4 @@ const ProblemStatementsSchema = mongoose.Schema({
     }
 });
 
-module.exports = mongoose.model("ProblemStatements", ProblemStatementsSchema);
+module.exports = mongoose.model("problemStatements", ProblemStatementsSchema);

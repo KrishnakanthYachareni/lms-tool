@@ -8,22 +8,47 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
-import SearchBar from '../SearchBar/index.js';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectDashboardData } from '../AppManager/selectors.js';
-import { loadDashboardData } from '../AppManager/slice.js';
+import { loadDashboardData, loadTags } from '../AppManager/slice.js'
+import { selectTags } from '../AppManager/selectors';
 import { API_ENDPOINT } from '../../constants.js';
+import { Autocomplete, TextField } from '@mui/material';
+import { styled } from '@mui/material/styles';
+import CloseIcon from '@mui/icons-material/Close';
+import PropTypes from 'prop-types';
+import Chip from "@material-ui/core/Chip";
+
+
+const Label = styled('label')`
+  padding: 0 0 4px;
+  line-height: 1.5;
+  display: block;
+`;
+
+const FixedTag = styled("div")`
+align-items: center;
+margin: 7px 0;
+margin-right: 10px;
+padding: 0 10px;
+padding-right: 5px;
+border: 1px solid #1976D2;
+border-radius: 5px;
+background-color: #1976D2;
+white-space: nowrap;
+color: white;
+`
 
 const columns = [
   { id: 'mediaType', label: 'File\u00a0Type', minWidth: 170 },
   { id: 'problemStatement', label: 'Project\u00a0Name', minWidth: 100 },
-  {
-    id: 'group',
-    label: 'Team\u00a0Name',
-    minWidth: 170,
-    align: 'right',
-    format: (value) => value.toLocaleString('en-US'),
-  },
+  // {
+  //   id: 'group',
+  //   label: 'Team\u00a0Name',
+  //   minWidth: 170,
+  //   align: 'right',
+  //   format: (value) => value.toLocaleString('en-US'),
+  // },
   {
     id: 'updatedAt',
     label: 'Last\u00a0Modified\u00a0Date',
@@ -41,28 +66,55 @@ const columns = [
 
 ];
 
+function Tag(props) {
+  const { label, onDelete, ...other } = props;
+  return (
+    <div {...other}>
+      <span>{label}</span>
+      <CloseIcon onClick={onDelete} />
+    </div>
+  );
+}
+
+
+
 
 
 export default function DashboardSummary() {
-  
+
   const dispatch = useDispatch()
   const dashboardData = useSelector(selectDashboardData)
-
-  const [rows,setRows] = React.useState([])
-  
-  console.log(dashboardData)
-  React.useEffect(()=>{
-   
-      setRows(dashboardData)
-    
-  },[dashboardData])
+  const [rows, setRows] = React.useState([])
+  React.useEffect(() => {
+    setRows(dashboardData)
+  }, [dashboardData])
 
 
-  React.useEffect(()=>{
+  React.useEffect(() => {
+    console.log('loadTags')
+    dispatch(loadTags())
     dispatch(loadDashboardData())
-  },[])
- 
 
+  }, [])
+
+  const allTags = useSelector(selectTags)
+
+  const handleTag = (name) => {
+
+    console.log("clicked", name, value)
+    if (!(value.filter(e => e === name).length > 0)) {
+      setValue([...value, name])
+
+    }
+
+  }
+  const [value, setValue] = React.useState([]);
+
+  React.useEffect(() => {
+    console.log('value', value)
+    dispatch(loadDashboardData({ search: value }))
+  }, [value])
+  console.log(dashboardData)
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
       <Grid container spacing={3}>
@@ -76,63 +128,103 @@ export default function DashboardSummary() {
               zIndex: 100
             }}
           >
-            <SearchBar />
+            <Label >Search videos, presentations, images, problem statements etc!</Label>
+            <Autocomplete
+              value={value}
+              disablePortal
+              onChange={(event, newValue) => {
+                console.log(newValue)
+                setValue(newValue);
+              }}
+              multiple
+              id="tags-filled"
+              options={allTags}
+              freeSolo
+              // renderTags={(value, getTagProps) =>
+              //   value.map((option, index) => (
+              //     <Chip
+              //       variant="outlined"
+              //       label={option}
+              //       {...getTagProps({ index })}
+              //     />
+              //   ))
+              // }
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  variant="standard"
+                  label=""
+                  placeholder="Search"
+                />
+              )}
+            />
+           
+            <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+              {allTags && allTags.map((tag, index) => (
+                <FixedTag 
+                  className="tag"
+                  onClick={() => handleTag(tag)}
+                  key={index}
+                >
+                  {tag}
+
+                </FixedTag>
+              ))}
+            </div>
           </Paper>
 
         </Grid>
         <Grid item xs={12} md={12} lg={12}>
-          <Paper
+          {/* <Paper
             sx={{
               p: 2,
               display: 'flex',
               flexDirection: 'column',
               height: "100%",
             }}
-          >
-            <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-              <TableContainer sx={{ maxHeight: 440 }}>
-                <Table stickyHeader aria-label="sticky table">
-                  <TableHead>
-                    <TableRow>
-                      {columns.map((column) => (
-                        <TableCell
-                          key={column.id}
-                          align={column.align}
-                          style={{ minWidth: column.minWidth }}
-                        >
-                          {column.label}
-                        </TableCell>
-                      ))}
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {rows
-                      .map((row) => {
-                        return (
-                          <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                            {columns.map((column) => {
-                              console.log(row,column)
-                              const value = row[column.id];
-                              console.log(value)
-                              return (
-                                <TableCell key={column.id} align={column.align}>
-                                  {column.format && typeof value === 'number'
-                                    ? column.format(value)
-                                    : column.label=='Actions'?<a href={`${API_ENDPOINT}/uploads/${value}`} download="file" target="_blank"> Download </a>: value}
-                                </TableCell>
-                              );
-                            })}
-                            
-                          </TableRow>
-                        );
-                      })}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-              
-            </Paper>
+          > */}
+          {/* <Paper sx={{ width: '100%', overflow: 'hidden' }}> */}
+          <TableContainer sx={{ maxHeight: 440 }}>
+            <Table stickyHeader aria-label="sticky table">
+              <TableHead>
+                <TableRow>
+                  {columns.map((column) => (
+                    <TableCell
+                      key={column.id}
+                      align={column.align}
+                      style={{ minWidth: column.minWidth }}
+                    >
+                      {column.label}
+                    </TableCell>
+                  ))}
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {rows
+                  .map((row) => {
+                    return (
+                      <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                        {columns.map((column) => {
+                          const value = row[column.id];
+                          return (
+                            <TableCell key={column.id} align={column.align}>
+                              {column.format && typeof value === 'number'
+                                ? column.format(value)
+                                : column.label == 'Actions' ? <a href={`${API_ENDPOINT}/uploads/${value}`} download="file" target="_blank"> Download </a> : value}
+                            </TableCell>
+                          );
+                        })}
 
-          </Paper>
+                      </TableRow>
+                    );
+                  })}
+              </TableBody>
+            </Table>
+          </TableContainer>
+
+          {/* </Paper> */}
+
+          {/* </Paper> */}
         </Grid>
 
       </Grid>

@@ -11,10 +11,12 @@ import GroupDetails from './components/Groups/GroupDetail';
 import ProblemStatements from './components/ProblemStatements'
 import Presentations from './components/Presentations';
 import ProblemStatementCreate from './components/ProblemStatements/CreateProblemStatement';
+import AlertMessage from './components/Alert';
 function App() {
   return (
     <div className="App">
       <AppManager />
+      <AlertMessage />
       <Router >
         <Switch>
           <Route exact path="/dashboard">
@@ -32,7 +34,7 @@ function App() {
           <Route exact path="/groups">
             <Groups />
           </Route>
-          <Route exact path="/group/:id">
+          <Route exact path="/group/">
             <GroupDetails />
           </Route>
           <Route exact path="/problem-statements">

@@ -1,10 +1,5 @@
 import * as React from 'react';
 import {  createTheme, ThemeProvider } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import Header from '../Header/index.js';
-import Sider from '../Sider/index.js';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
@@ -16,6 +11,7 @@ import { WithContext as ReactTags } from 'react-tag-input';
 import { uploadProblemStatement } from './slice.js';
 import { selectUploadingError } from './selectors.js';
 import { selectUserInfo } from '../AppManager/selectors.js';
+import { styled } from '@mui/material/styles';
 
 
 const Keys = {
@@ -23,7 +19,13 @@ const Keys = {
   COMMA: 188,
   ENTER: 13
 };
-
+const Wrapper = styled('div')`
+display: flex;
+flex-direction: column;
+align-items: center;
+width: "100%"
+justify-content: space-between;
+`
 
 const mdTheme = createTheme();
 
@@ -47,10 +49,9 @@ export default function ProblemStatementCreate() {
   const [tags, setTags] = React.useState(defaultValues.tags)
 
 
-  const uploadingError = useSelector(selectUploadingError)
   const ref = React.useRef();
 
-  const userInfo = useSelector(selectUserInfo);
+  const userInfo = JSON.parse(localStorage.getItem('userInfo'));
   console.log(userInfo)
   React.useEffect(() => {
     console.log(formValues)
@@ -58,13 +59,10 @@ export default function ProblemStatementCreate() {
 
 
   const handleSubmit = (event) => {
-      console.log('create')
-    event.preventDefault();
 	 let tagsObject =[];
     tags.map(item=>{
       tagsObject.push(item.text)
       })
-    
     dispatch(uploadProblemStatement({
       file: file,
       title: formValues.title,
@@ -73,17 +71,9 @@ export default function ProblemStatementCreate() {
       tags: tagsObject,
       createdBy: userInfo.email,
     }))
-        if(uploadingError){
-      alert("Error uploadig problemStatement")
-    }
-    if(!uploadingError){
-      alert("Upload Successfull")
-      setFormValues(defaultValues)
-      ref.current.value=""
-      setTags([])
-    }
     
   };
+
 
   const handleFile = (event) => {
     console.log(event.target.files)
@@ -102,41 +92,11 @@ export default function ProblemStatementCreate() {
     setTags(tags.filter((tag, index) => index !== i))
   }
 
-  return (
-    <ThemeProvider theme={mdTheme}>
-      <Box sx={{ display: 'flex' }}>
-        <CssBaseline />
-        <Header open={open} toggleDrawer={toggleDrawer} />
-        <Sider />
-        <Box
-          component="main"
-          sx={{
-            backgroundColor: (theme) =>
-              theme.palette.mode === 'light'
-                ? theme.palette.grey[100]
-                : theme.palette.grey[900],
-            flexGrow: 1,
-            height: '100vh',
-            overflow: 'auto',
-            alignItems: 'center',
-          }}
-          alignItems="center"
-          justifyContent="center"
-        >
-          <Toolbar />
-          <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-            <Grid container spacing={3}>
-              <Grid item xs={12} md={12} lg={12}>
-                <Paper
-                  sx={{
-                    p: 2,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    height: "100%",
-                  }}
+  console.log(userInfo)
 
-                >
-                  <Grid container spacing={2} justifyContent="center" alignItems="center">
+  return (
+    <Wrapper>
+                     <Grid container spacing={2} justifyContent="center" alignItems="center">
                   <Grid item xs={12} sm={8}>
                   <TextField
                         margin="normal"
@@ -219,19 +179,12 @@ export default function ProblemStatementCreate() {
                         size="medium"
                         onClick={handleSubmit}
                       >
-                        Create New Problem Statement
+                        Create New ProblemStatement
                       </Button>
                     </Grid>
                   </Grid>
-                </Paper>
-
-              </Grid>
-
-            </Grid>
-          </Container>
-        </Box>
-      </Box>
-    </ThemeProvider>
+                  </Wrapper>
+      
   );
 }
 

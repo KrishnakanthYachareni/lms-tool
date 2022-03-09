@@ -20,7 +20,15 @@ const UserSchema = mongoose.Schema({
   userType: {
     type: String,
     required: true
-  }
+  },
+  hasProject: {
+    type: Boolean,
+    default: false
+  },
+  hasTeam: {
+    type: Boolean,
+    default: false
+  },
 });
 
 // export model user with AdminUserSchema

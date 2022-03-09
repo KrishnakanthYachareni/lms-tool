@@ -16,43 +16,18 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import TablePagination from '@mui/material/TablePagination';
 import Button from '@mui/material/Button';
+import { Accordion, AccordionSummary, List, ListItem, ListItemButton, ListItemText, } from '@mui/material';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { loadCurrentGroup, loadCurrentGroupMedia } from '../../AppManager/slice.js';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import { selectCurrentGroup, selectCurrentGroupMedia } from '../../AppManager/selectors.js';
 
-function not(a, b) {
-    return a.filter((value) => b.indexOf(value) === -1);
-}
-
-function intersection(a, b) {
-    return a.filter((value) => b.indexOf(value) !== -1);
-}
-
-function Copyright(props) {
-    return (
-        <Typography variant="body2" color="text.secondary" align="center" {...props}>
-            {'Copyright © '}
-            <Link color="inherit" href="https://mui.com/">
-                Your Website
-            </Link>{' '}
-            {new Date().getFullYear()}
-            {'.'}
-        </Typography>
-    );
-}
-
-const drawerWidth = 240;
 
 
 const mdTheme = createTheme();
-const Pop = props => {
-    const { className, anchorEl, style, ...rest } = props
-    const bound = anchorEl.getBoundingClientRect()
-    return <div {...rest} style={{
-        position: 'absolute',
-        zIndex: 9999,
-        width: bound.width
-    }} />
-}
 
 const columns = [
     { id: 'fileType', label: 'File\u00a0Type', minWidth: 170 },
@@ -78,14 +53,21 @@ export default function GroupDetails() {
     const toggleDrawer = () => {
         setOpen(!open);
     };
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
+    const dispatch = useDispatch()
 
+    const params = useParams();
+    console.log(params, 'params')
+
+    React.useEffect(() => {
+        dispatch(loadCurrentGroup({ groupName: "test" }))
+    }, [])
+    const currentGroup = useSelector(selectCurrentGroup)
+
+    React.useEffect(() => {
+        dispatch(loadCurrentGroupMedia({ id: currentGroup._id }))
+    }, [currentGroup])
+    const currentGroupMedia = useSelector(selectCurrentGroupMedia)
+    console.log(currentGroupMedia)
 
     return (
         <ThemeProvider theme={mdTheme}>
@@ -117,12 +99,34 @@ export default function GroupDetails() {
                                     display: 'flex',
                                     flexDirection: 'column',
                                     height: "100%",
+                                    justifyContent: 'space-evenly'
                                 }}
                             >
                                 <div>
-                                    GroupName : Group1
+                                    {currentGroup.name}
                                 </div>
                             </Paper>
+
+                            <Accordion>
+                                <AccordionSummary
+                                    expandIcon={<ExpandMoreIcon />}
+                                    aria-controls="panel1a-content"
+                                    id="panel1a-header"
+                                >
+                                    <Typography>Team Members</Typography>
+                                </AccordionSummary>
+                                <AccordionDetails>
+                                    <List>
+                                        {currentGroup && currentGroup.teamMembers?.map((value, index)=>
+                                        <ListItem disablePadding>
+                                            <ListItemButton>
+                                                <ListItemText primary={value.email} />
+                                            </ListItemButton>
+                                        </ListItem>
+                                        )}
+                                    </List>
+                                </AccordionDetails>
+                            </Accordion>
                         </Grid>
                         <Grid
                             item xs={9} md={10} lg={10}>
@@ -151,29 +155,17 @@ export default function GroupDetails() {
                                             </TableRow>
                                         </TableHead>
                                         <TableBody>
-                                            {rows
-                                                .map((row) => {
+                                            {currentGroupMedia && currentGroupMedia?.map((row,index) => {
                                                     return (
                                                         <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                                                            {/* {columns.map((column) => {
-                                                                const value = row[column.id];
-                                                                return (
-                                                                    <TableCell key={column.id} align={column.align}>
-                                                                        {column.format && typeof value === 'number'
-                                                                            ? column.format(value)
-                                                                            : value}
-                                                                    </TableCell>
-                                                                );
-                                                            
-                                                            })} */}
                                                             <TableCell key={row.id}>
-                                                                {row['fileType']}
+                                                                {row.mediaType}
                                                             </TableCell>
                                                             <TableCell key={row.id}>
-                                                                {row['projectName']}
+                                                                {currentGroup?.problemStatement?.projectName || ''}
                                                             </TableCell>
                                                             <TableCell key={row.id}>
-                                                                {row['uploadedDate']}
+                                                                {row['updatedAt']}
                                                             </TableCell>
                                                             <TableCell key={row.id} align="center">
                                                                 <Button variant="contained">Download</Button>
