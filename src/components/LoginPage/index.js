@@ -71,6 +71,12 @@ export default function LoginPage() {
       }))
       setUsername('')
       setPassword('')
+      dispatch(createAlert({
+        message:"",
+        hasAlert: false,
+        type:"error"
+      }))
+     
     }
   },[userInfoError])
 
