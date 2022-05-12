@@ -283,7 +283,12 @@ export function* createGroup({ payload }) {
                 put(createAlert(
                     { message: 'Group Created Successfully', hasAlert: true, type: 'success' }
                 )),
-                , put(saveGroupLoaded(response))])
+                , put(saveGroupLoaded(response))
+                , put(createAlert(
+                    { message: '', hasAlert: false, type: 'success' }
+                )),
+            
+            ])
         }
     }
     catch (err) {
@@ -385,7 +390,12 @@ export function* postTemplate({ payload }) {
             put(createAlert(
                 { message: 'Template Created Successfully', hasAlert: true, type: 'success' }
             )),
-            yield put(templateUploaded())]);
+            
+             put(templateUploaded()),
+            put(createAlert(
+                { message: '', hasAlert: false, type: 'success' }
+            )),
+        ]);
 
     }
     catch (err) {
@@ -393,7 +403,10 @@ export function* postTemplate({ payload }) {
             put(createAlert(
                 { message: 'Template Created Successfully', hasAlert: true, type: 'success' }
             )),
-            yield put(templateUploaded())])
+             put(templateUploaded()),
+            put(createAlert(
+                { message: '', hasAlert: false, type: 'success' }
+            )),])
     }
 }
 

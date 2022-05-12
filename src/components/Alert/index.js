@@ -10,12 +10,12 @@ const AlertMessage = () => {
     const [show, setShow] = useState(false);
     const [alertContent, setAlertContent] = useState({})
     useEffect(() => {
-        console.log(alert,'alert')
         if (alert?.hasAlert) {
             setAlertContent(alert)
             setShow(true)
         }
     }, [alert]);
+
 
     const onClose = () => {
         setShow(false);
