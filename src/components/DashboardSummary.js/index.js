@@ -13,9 +13,8 @@ import { selectDashboardData } from '../AppManager/selectors.js';
 import { loadDashboardData, loadTags } from '../AppManager/slice.js'
 import { selectTags } from '../AppManager/selectors';
 import { API_ENDPOINT } from '../../constants.js';
-import { Autocomplete, TextField } from '@mui/material';
+import { Autocomplete, Chip, TextField } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import CloseIcon from '@mui/icons-material/Close';
 
 const Label = styled('label')`
   padding: 0 0 4px;
@@ -36,22 +35,25 @@ white-space: nowrap;
 color: white;
 `
 
+const ChipContainer = styled('Chip')`
+  display: flex;
+  justify-content: space-evenly;
+`;
+
 const columns = [
   { id: 'mediaType', label: 'File\u00a0Type', minWidth: 170 },
-  // { id: 'problemStatement', label: 'Project\u00a0Name', minWidth: 100 },
-  // {
-  //   id: 'group',
-  //   label: 'Team\u00a0Name',
-  //   minWidth: 170,
-  //   align: 'right',
-  //   format: (value) => value.toLocaleString('en-US'),
-  // },
   {
-    id: 'updatedAt',
-    label: 'Last\u00a0Modified\u00a0Date',
+    id: 'description',
+    label: 'Description',
     minWidth: 170,
     // align: 'right',
     format: (value) => value.toLocaleString('en-US'),
+  },
+  {
+    id: 'tags',
+    label: 'Tags',
+    minWidth: 170,
+    align: 'center',
   },
   {
     id: "mediaUrl",
@@ -60,7 +62,6 @@ const columns = [
     align: 'center',
     format: (value) => value.toLocaleString('en-US'),
   }
-
 ];
 
 
@@ -76,7 +77,6 @@ export default function DashboardSummary() {
 
 
   React.useEffect(() => {
-    console.log('loadTags')
     dispatch(loadTags())
     dispatch(loadDashboardData())
 
@@ -86,7 +86,6 @@ export default function DashboardSummary() {
 
   const handleTag = (name) => {
 
-    console.log("clicked", name, value)
     if (!(value.filter(e => e === name).length > 0)) {
       setValue([...value, name])
 
@@ -96,10 +95,8 @@ export default function DashboardSummary() {
   const [value, setValue] = React.useState([]);
 
   React.useEffect(() => {
-    console.log('value', value)
     dispatch(loadDashboardData({ search: value }))
   }, [value])
-  console.log(dashboardData)
   return (
     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
       <Grid container spacing={3}>
@@ -118,22 +115,13 @@ export default function DashboardSummary() {
               value={value}
               disablePortal
               onChange={(event, newValue) => {
-                console.log(newValue)
                 setValue(newValue);
               }}
               multiple
               id="tags-filled"
               options={allTags}
               freeSolo
-              // renderTags={(value, getTagProps) =>
-              //   value.map((option, index) => (
-              //     <Chip
-              //       variant="outlined"
-              //       label={option}
-              //       {...getTagProps({ index })}
-              //     />
-              //   ))
-              // }
+
               renderInput={(params) => (
                 <TextField
                   {...params}
@@ -160,16 +148,7 @@ export default function DashboardSummary() {
 
         </Grid>
         <Grid item xs={12} md={12} lg={12}>
-          {/* <Paper
-            sx={{
-              p: 2,
-              display: 'flex',
-              flexDirection: 'column',
-              height: "100%",
-            }}
-          > */}
-          {/* <Paper sx={{ width: '100%', overflow: 'hidden' }}> */}
-          <TableContainer sx={{ maxHeight: 440 }}>
+        <TableContainer sx={{ maxHeight: 440 }}>
             <Table stickyHeader aria-label="sticky table">
               <TableHead>
                 <TableRow>
@@ -189,32 +168,34 @@ export default function DashboardSummary() {
                   .map((row) => {
                     return (
                       <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                      
+
                         <TableCell key={row.id}>
-                          {row.mediaType}
+                          {row.uploadType}
                         </TableCell>
-                        {/* <TableCell key={row.id}>
-                          {row?.group?.problemStatement?.title || ''}
-                        </TableCell> */}
                         <TableCell key={row.id}>
-                          {row['updatedAt']}
+                          {row.description}
+                        </TableCell>
+                        <TableCell key={row.id}>
+                          <ChipContainer>
+                            {row.tags?.map(item => {
+                              if (item) {
+                                return <Chip style={{borderRadius:'5px'}} color="primary" label={item} />
+                              }
+                            } 
+                            )}
+                          </ChipContainer>
                         </TableCell>
                         <TableCell key={row.id} align="center">
-                        <a href={`${API_ENDPOINT}/uploads/${row.mediaUrl}`} download="file" target="_blank"> Download </a>
+                          <a href={`${API_ENDPOINT}/uploads/${row.mediaUrl}`} download="file" target="_blank"> Download </a>
                         </TableCell>
-                        </TableRow>
+                      </TableRow>
 
-                        );
+                    );
                   })}
-                      </TableBody>
+              </TableBody>
             </Table>
           </TableContainer>
-
-          {/* </Paper> */}
-
-          {/* </Paper> */}
         </Grid>
-
       </Grid>
     </Container>
   );

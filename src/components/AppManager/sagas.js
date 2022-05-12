@@ -1,7 +1,6 @@
 import { all, call, put, takeLatest } from 'redux-saga/effects';
 import request from '../../request';
 import { API_ENDPOINT } from '../../constants';
-import Alert from '@mui/material/Alert';
 
 import {
     loadUserLogin,
@@ -36,7 +35,13 @@ import {
     createAlertLoadingError,
     loadCurrentGroupMedia,
     currentGroupMediaLoaded,
-    currentGroupMediaLoadingError
+    currentGroupMediaLoadingError,
+    uploadTemplate,
+    templateUploaded,
+    templateUploadingError,
+    templatesLoaded,
+    templatesLoadingError,
+    loadTemplates
 } from './slice';
 
 
@@ -104,7 +109,7 @@ export function* checkUserLogin({ payload }) {
 }
 
 
-export function* getproblemStatements({ payload }) {
+export function* getproblemStatements() {
 
     const requestUrl = `${API_ENDPOINT}/problemStatement/`
 
@@ -351,6 +356,73 @@ export function* getCurrentGroupMedia({ payload }) {
 
 
 
+export function* postTemplate({ payload }) {
+    const { file, year, createdBy, tags, description, title } = payload;
+    let formData = new FormData()
+
+    formData.append('title', title)
+    formData.append('year', year)
+    formData.append('tags', tags)
+    formData.append('description', description)
+    formData.append('createdBy', createdBy)
+    if (file && file.length > 0) {
+
+        for (let i = 0; i < file.length; i++) {
+            formData.append("m", file[i]);
+        }
+    }
+    const requestUrl = `${API_ENDPOINT}/template`
+
+    try {
+        const options = {
+            mode: 'cors',
+            method: "POST",
+            body: formData
+        }
+        const response = yield call(request, requestUrl, options)
+
+        yield all([
+            put(createAlert(
+                { message: 'Template Created Successfully', hasAlert: true, type: 'success' }
+            )),
+            yield put(templateUploaded())]);
+
+    }
+    catch (err) {
+        yield all([
+            put(createAlert(
+                { message: 'Template Created Successfully', hasAlert: true, type: 'success' }
+            )),
+            yield put(templateUploaded())])
+    }
+}
+
+
+export function* getTemplates() {
+
+    const requestUrl = `${API_ENDPOINT}/template/`
+
+    try {
+        const options = {
+            mode: 'cors',
+            headers: {
+                'Content-Type': "application/json"
+            },
+            method: "GET"
+        }
+        const response = yield call(request, requestUrl, options)
+
+        if (response) {
+            yield put(templatesLoaded(response));
+        }
+    }
+    catch (err) {
+        yield put(templatesLoadingError());
+
+    }
+}
+
+
 export default function* loginPageWatcher() {
     yield takeLatest(loadDashboardData.type, getDashboardData);
     yield takeLatest(saveUserSignup.type, registerUser);
@@ -364,5 +436,7 @@ export default function* loginPageWatcher() {
     yield takeLatest(loadCurrentGroup.type, getCurrentGroup);
     yield takeLatest(createAlert.type, createAlertMessage);
     yield takeLatest(loadCurrentGroupMedia.type, getCurrentGroupMedia);
+    yield takeLatest(uploadTemplate.type, postTemplate);
+    yield takeLatest(loadTemplates.type, getTemplates);
 
 }

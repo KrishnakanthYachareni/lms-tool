@@ -66,6 +66,17 @@ const selectCurrentGroupMedia = createSelector(
     appManagerState => appManagerState.currentGroupMedia.data
 )
 
+const selectTemplates = createSelector(
+    [selectappManager],
+    appManagerState => appManagerState.templates.data
+)
+
+
+const selectTemplateUploadingError = createSelector(
+    [selectappManager],
+    appManagerState => appManagerState.uploadTemplate
+)
+
 export { 
     selectUserInfo, 
     selectProblemStatements, 
@@ -78,5 +89,7 @@ export {
     selectCurrentGroup,
     selectCreateGroup,
     selectAlert,
-    selectCurrentGroupMedia
+    selectCurrentGroupMedia,
+    selectTemplates,
+    selectTemplateUploadingError
 }

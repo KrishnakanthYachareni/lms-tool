@@ -9,7 +9,6 @@ import {
 
 export function* getLoginInfo({ payload }) {
     const { username, password, userType } = payload;
-    console.log(username,password,userType)
     const requestUrl = `${API_ENDPOINT}/login`
 
     try{
@@ -20,7 +19,6 @@ export function* getLoginInfo({ payload }) {
             }
         }
         const response =yield call(request, requestUrl, options)
-        console.log('response23', response)
         if(response.success){
             yield put(userLoginLoaded(response));
         }

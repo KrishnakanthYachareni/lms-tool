@@ -43,7 +43,6 @@ export default function LoginPage() {
   const dispatch = useDispatch()
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log(email, password,);
     dispatch(loadUserLogin({
       email,
       password,
@@ -55,7 +54,6 @@ export default function LoginPage() {
   const userInfoError = useSelector(selectUserInfoError)
 
   useEffect(() => {
-    console.log('userinfo', userInfo)
     if (Object.keys(userInfo).length !== 0 && userInfo) {
       dispatch(loadProblemStatements())
       localStorage.setItem('userInfo', JSON.stringify(userInfo))

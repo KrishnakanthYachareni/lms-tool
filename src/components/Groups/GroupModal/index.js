@@ -30,7 +30,6 @@ export default function GroupModal() {
     const dispatch = useDispatch()
     const handleSubmit = (event) => {
         event.preventDefault();
-        console.log(formValues);
         dispatch(saveGroup({
             ...formValues,
             year: formValues.year.getFullYear()
@@ -109,7 +108,6 @@ export default function GroupModal() {
                         inputValue={formValues.group}
                         value={formValues.group}
                         onChange={(event, newInputValue) => {
-                            console.log(newInputValue)
                             setFormValues({
                                 ...formValues,
                                 teamMembers: newInputValue

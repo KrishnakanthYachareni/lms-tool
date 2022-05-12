@@ -40,7 +40,7 @@ export const mainListItems =(currentPath)=> (
             </ListItemIcon>
             <ListItemText primary="Groups" />
         </ListItem>
-        <ListItem button  selected={paths.templates === currentPath}>
+        <ListItem button component="a" href="/dsd4/#/templates" selected={paths.templates === currentPath}>
             <ListItemIcon>
                 <AssignmentIcon />
             </ListItemIcon>

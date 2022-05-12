@@ -5,7 +5,6 @@ import MuiAppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
-import Link from '@mui/material/Link';
 import MenuIcon from '@mui/icons-material/Menu';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import Menu from '@mui/material/Menu';
@@ -62,7 +61,6 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 export default function Header({open,toggleDrawer}) {
   
-  console.log(open,'in header')
   const [anchorEl, setAnchorEl] = React.useState(null);
   const ProfileOpen = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -74,9 +72,7 @@ export default function Header({open,toggleDrawer}) {
   const history = useHistory()
 
   const dispatch = useDispatch()
-  console.log(open)
   const handleLogout = () => {
-    console.log('logout')
     dispatch(setUserData({}))
     history.push('/')
   }
@@ -92,7 +88,6 @@ export default function Header({open,toggleDrawer}) {
           color="inherit"
           aria-label="open drawer"
           onClick={()=>{
-            console.log('here')
             toggleDrawer()
           }}
           sx={{
@@ -109,12 +104,9 @@ export default function Header({open,toggleDrawer}) {
           noWrap
           sx={{ flexGrow: 1 }}
         >
-          Dashboard
+          DSD4
         </Typography>
         <IconButton color="inherit">
-          {/* <Badge badgeContent={4} color="secondary">
-                <NotificationsIcon />
-              </Badge> */}
           <PersonOutlineIcon
             aria-controls="basic-menu"
             aria-haspopup="true"

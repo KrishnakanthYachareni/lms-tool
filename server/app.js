@@ -11,6 +11,7 @@ var mediaRouter = require("./routes/media")
 var problemStatementsRouter = require("./routes/problemStatements")
 var tagRouter = require("./routes/tags")
 var groupRouter = require("./routes/groups")
+var templatesRouter = require("./routes/templates")
 
 var app = express();
 const InitiateMongoServer = require("./db");
@@ -36,6 +37,7 @@ app.use('/media', mediaRouter);
 app.use('/problemStatement', problemStatementsRouter);
 app.use('/tag', tagRouter);
 app.use('/group', groupRouter);
+app.use('/template', templatesRouter);
 
 
 app.use('/uploads', express.static('uploads'));

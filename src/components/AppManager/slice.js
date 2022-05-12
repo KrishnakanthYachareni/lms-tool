@@ -11,6 +11,15 @@ export const initialState = {
         loading: false,
         error: false
     },
+    uploadTemplate: {
+        saving: false,
+        error: false
+    },
+    templates: {
+        data : [],
+        loading: false,
+        error: false
+    },
     problemStatementsAll: {
         data: [],
         loading: false,
@@ -157,7 +166,6 @@ const loginSlice = createSlice({
         },
 
         dashboardDataLoaded(state, { payload }) {
-            console.log('here')
             state.dashboardData.data = payload
             state.dashboardData.loading = false;
             state.dashboardData.error = false
@@ -174,7 +182,7 @@ const loginSlice = createSlice({
         },
 
         studentsLoaded(state, { payload }) {
-            console.log('here')
+            
             state.students.data = payload
             state.students.loading = false;
             state.students.error = false
@@ -230,7 +238,6 @@ const loginSlice = createSlice({
             state.currentGroup.error = true
         },
         createAlert(state) {
-            console.log('in here')
             state.alert.loading = true;
             state.alert.error = false
         },
@@ -250,7 +257,6 @@ const loginSlice = createSlice({
         },
 
         currentGroupMediaLoaded(state, { payload }) {
-            console.log(payload)
             state.currentGroupMedia.data = payload
             state.currentGroupMedia.loading = false;
             state.currentGroupMedia.error = false
@@ -259,6 +265,37 @@ const loginSlice = createSlice({
         currentGroupMediaLoadingError(state) {
             state.currentGroupMedia.loading = true;
             state.currentGroupMedia.error = true
+        },
+
+        // templates
+        uploadTemplate (state){
+            state.uploadTemplate.error= false;
+            state.uploadTemplate.saving= true
+        },
+        templateUploaded (state){
+         state.uploadTemplate.saving= false
+        },
+        templateUploadingError(state){
+         state.uploadTemplate.error= true;
+         state.uploadTemplate.saving= false
+        },
+
+
+        // all templates
+        loadTemplates(state) {
+            state.templates.loading = true;
+            state.templates.error = false
+        },
+
+        templatesLoaded(state, { payload }) {
+            state.templates.data = payload
+            state.templates.loading = false;
+            state.templates.error = false
+        },
+
+        templatesLoadingError(state) {
+            state.templates.loading = true;
+            state.templates.error = true
         },
     }
 })
@@ -298,7 +335,13 @@ export const {
     createAlertLoadingError,
     loadCurrentGroupMedia,
     currentGroupMediaLoaded,
-    currentGroupMediaLoadingError
+    currentGroupMediaLoadingError,
+    uploadTemplate,
+    templateUploaded,
+    templateUploadingError,
+    loadTemplates,
+    templatesLoaded,
+    templatesLoadingError
 } = loginSlice.actions
 
 export default loginSlice.reducer;

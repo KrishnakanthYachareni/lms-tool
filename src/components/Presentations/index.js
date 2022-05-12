@@ -9,9 +9,9 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import { useDispatch } from 'react-redux';
-import { loadGroups, loadProblemStatements } from '../AppManager/slice'
+import { loadGroups } from '../AppManager/slice'
 import { useSelector } from 'react-redux';
-import { selectGroups, selectProblemStatements } from '../AppManager/selectors';
+import { selectGroups } from '../AppManager/selectors';
 import Autocomplete from '@mui/material/Autocomplete';
 import Paper from '@mui/material/Paper';
 import Container from '@mui/material/Container';
@@ -61,11 +61,6 @@ export default function Presentations() {
   }, [])
 
 
-  React.useEffect(() => {
-    console.log(formValues)
-  }, [formValues])
-
-
   const handleSubmit = (event) => {
     event.preventDefault();
     let tagsObject = [];
@@ -78,7 +73,6 @@ export default function Presentations() {
       description: formValues.description,
       tags: tagsObject
     }))
-    console.log(uploadingError)
     if (uploadingError) {
       alert("Error uploadig Presentation")
     }
@@ -93,7 +87,6 @@ export default function Presentations() {
   };
 
   const handleFile = (event) => {
-    console.log(event.target.files)
     if (event.target.files.length > 0) {
       setFile(event.target.files[0])
 
@@ -101,7 +94,6 @@ export default function Presentations() {
   }
 
   const handleAddition = (tag) => {
-    console.log(tag)
     setTags([...tags, tag])
   }
 
@@ -173,7 +165,6 @@ export default function Presentations() {
                         placeholder="Description of the Presentation"
                         style={{ width: "100%" }}
                         onChange={(event) => {
-                          console.log(event.target.value)
                           setFormValues({
                             ...formValues,
                             description: event.target.value

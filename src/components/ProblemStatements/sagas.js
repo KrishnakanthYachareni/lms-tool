@@ -9,7 +9,6 @@ import { createAlert } from '../AppManager/slice';
 
 
 export function* postProblemStatement({ payload }) {
-    console.log(payload, 'dada')
     const { file, year, createdBy, tags, description, title } = payload;
     let formData = new FormData()
 
@@ -34,7 +33,6 @@ export function* postProblemStatement({ payload }) {
             body: formData
         }
         const response = yield call(request, requestUrl, options)
-        console.log(response, response)
 
         if (response) {
             yield all([
@@ -51,7 +49,5 @@ export function* postProblemStatement({ payload }) {
 
 
 export default function* problemStatementsPageWatcher() {
-    // yield takeLatest(loadUserLogin.type, getLoginInfo),
     yield takeLatest(uploadProblemStatement.type, postProblemStatement);
-
 }

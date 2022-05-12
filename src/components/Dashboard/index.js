@@ -12,10 +12,8 @@ import Sider from '../Sider/index.js';
 const mdTheme = createTheme();
 
 function DashboardContent() {
-  console.log('dashboard')
   const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => {
-    console.log('clicked')
     setOpen(!open);
   };
   return (

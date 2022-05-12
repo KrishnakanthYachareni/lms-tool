@@ -25,7 +25,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectCurrentGroup, selectCurrentGroupMedia } from '../../AppManager/selectors.js';
 
 
-
 const mdTheme = createTheme();
 
 const columns = [
@@ -90,7 +89,7 @@ export default function GroupDetails() {
                                 <Link
                                     underline="hover"
                                     color="inherit"
-                                    href="/dsd4/#/groups"
+                                    href="/dsd4/#/templates"
                                 >
                                     Groups
                                 </Link>

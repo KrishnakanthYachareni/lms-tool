@@ -53,11 +53,6 @@ export default function Videos() {
     dispatch(loadGroups())
   }, [])
 
-  React.useEffect(() => {
-    console.log(formValues)
-  }, [formValues])
-
-
   const handleSubmit = (event) => {
     event.preventDefault();
 	 let tagsObject =[];

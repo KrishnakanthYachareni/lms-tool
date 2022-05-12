@@ -15,16 +15,14 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Button from '@mui/material/Button';
-import { selectProblemStatementsAll, selectUserInfo } from '../AppManager/selectors.js';
+import { selectTemplates, selectTemplateUploadingError } from '../AppManager/selectors.js';
 import { useDispatch, useSelector } from 'react-redux';
-import { loadProblemStatementsAll } from '../AppManager/slice.js';
+import { loadTemplates } from '../AppManager/slice.js';
 import { Chip, Modal } from '@mui/material';
 import Typography from '@mui/material/Typography';
-import ProblemStatementCreate from './CreateProblemStatement.js';
-import { selectUploadingError } from './selectors.js';
+import TemplateCreate from './CreateTemplate';
 import AlertMessage from '../Alert/index.js';
 import { API_ENDPOINT } from '../../constants.js';
-import { styled } from '@mui/material/styles';
 
 const mdTheme = createTheme();
 const style = {
@@ -38,23 +36,20 @@ const style = {
     boxShadow: 24,
     p: 4,
 };
-const ChipContainer = styled('Chip')`
-  display: flex;
-`;
 
 const columns = [
-    { id: 'title', label: 'Problem\u00a0Statement', minWidth: 100 },
-    // { id: 'references', label: 'Mediaattachements', minWidth: 100 },
-
+    { id: 'title', label: 'Template', minWidth: 100 },
     {
         id: 'description',
         label: 'Description',
-        minWidth: 100,
+        minWidth: 170,
+        align: 'right',
     },
     {
         id: 'year',
         label: 'Uploaded Year',
-        minWidth: 100,
+        minWidth: 170,
+        align: 'right',
     },
     {
         id: 'tags', label: 'tags', minWidth: 100,
@@ -62,17 +57,19 @@ const columns = [
     {
         id: 'createdBy',
         label: 'Created By',
-        minWidth: 100,
+        minWidth: 170,
+        align: 'right',
     },
     {
         id: 'actions',
         label: 'Actions',
-        minWidth: 70,
+        minWidth: 170,
+        align: 'right',
     },
 ];
 
 
-export default function ProblemStatements() {
+export default function Templates() {
     const [open, setOpen] = React.useState(true);
     const toggleDrawer = () => {
         setOpen(!open);
@@ -80,30 +77,31 @@ export default function ProblemStatements() {
     const dispatch = useDispatch()
     const [rows, setRows] = React.useState([])
 
-    const problemStatementsAll = useSelector(selectProblemStatementsAll)
-    const uploadingError = useSelector(selectUploadingError)
+    const templates = useSelector(selectTemplates)
+    const uploadingError = useSelector(selectTemplateUploadingError)
     const [modalOpen, setModelOpen] = React.useState(false);
     const handleModalOpen = () => setModelOpen(true);
     const handleModalClose = () => setModelOpen(false);
     const userInfo = JSON.parse(localStorage.getItem('userInfo'));
 
     React.useEffect(() => {
-        dispatch(loadProblemStatementsAll())
+        dispatch(loadTemplates())
     }, [])
 
     React.useEffect(() => {
-        setRows(problemStatementsAll)
-    }, [problemStatementsAll])
+        setRows(templates)
+    }, [templates])
 
     React.useEffect(() => {
-        dispatch(loadProblemStatementsAll())
+        dispatch(loadTemplates())
     }, [modalOpen])
 
     React.useEffect(() => {
-        if (!uploadingError?.error) {
+        if (!(uploadingError?.error)) {
             setModelOpen(false)
         }
     }, [uploadingError])
+
     const handleDownload = (references) => {
         function download_next(i) {
             if (i >= references.length) {
@@ -125,7 +123,6 @@ export default function ProblemStatements() {
         }
         download_next(0);
     }
-
 
     return (
         <ThemeProvider theme={mdTheme}>
@@ -150,7 +147,7 @@ export default function ProblemStatements() {
                     <Grid container spacing={10} alignItems="center"
                         justifyContent="center">
                         <Grid item xs={12} md={12} lg={12} style={{ marginTop: "50px" }}>
-                            {userInfo && <Button onClick={handleModalOpen} variant="contained">Create New ProblemStatement</Button>}
+                            {userInfo && <Button onClick={handleModalOpen} variant="contained">Create New Template</Button>}
                             <Modal
                                 open={modalOpen}
                                 onClose={handleModalClose}
@@ -159,10 +156,10 @@ export default function ProblemStatements() {
                             >
                                 <Box sx={style}>
                                     <Typography id="modal-modal-title" variant="h6" component="h2">
-                                        Add a new ProblemStatement
+                                        Add a new Template
                                     </Typography>
                                     <div id="modal-modal-description" sx={{ mt: 2 }}>
-                                        <ProblemStatementCreate />
+                                        <TemplateCreate />
                                     </div>
                                 </Box>
                             </Modal>
@@ -204,16 +201,21 @@ export default function ProblemStatements() {
                                                                 const raw = row[column.id];
                                                                 let value;
                                                                 if (column.label == 'tags') {
-                                                                    value = <ChipContainer>
+                                                                    // value = raw.map(item => item + ',')
+                                                                    value = <>
                                                                     {raw.map(item => {
-                                                                        if (item) {
-                                                                            return <Chip color="primary" label={item} />
+                                                                        if(item) {
+                                                                            return <Chip color="primary" label={item}/>
                                                                         }
-                                                                    }
-                                                                    )}
-                                                                </ChipContainer>
+                                                                    } 
+)}
+                                                                    </>
+
                                                                 }
-                                                               
+                                                                else if (column.label == 'references') {
+                                                                   
+                                                                    value = 1
+                                                                }
                                                                 else {
                                                                     value = raw
                                                                 }
@@ -225,6 +227,7 @@ export default function ProblemStatements() {
                                                             })}
                                                             <TableCell key={row.id} align="center">
                                                                 <Button variant="contained" onClick={() => handleDownload(row.references)}>Download</Button>
+
                                                             </TableCell>
                                                         </TableRow>
                                                     );

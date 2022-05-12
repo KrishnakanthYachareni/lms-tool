@@ -12,6 +12,7 @@ import ProblemStatements from './components/ProblemStatements'
 import Presentations from './components/Presentations';
 import ProblemStatementCreate from './components/ProblemStatements/CreateProblemStatement';
 import AlertMessage from './components/Alert';
+import Templates from './components/Templates';
 function App() {
   return (
     <div className="App">
@@ -43,11 +44,12 @@ function App() {
           <Route exact path="/problem-statements/create">
             <ProblemStatementCreate />
           </Route>
-          
           <Route exact path="/presentation">
             <Presentations />
           </Route>
-         
+          <Route exact path="/templates">
+            <Templates />
+          </Route>
         </Switch>
       </Router>
     </div>

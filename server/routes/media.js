@@ -5,7 +5,7 @@ const Media = require("../models/media");
 const Tag = require("../models/tags");
 const Group = require("../models/group");
 const ProblemStatement = require("../models/problemStatements")
-
+const Template = require("../models/templates")
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, 'uploads')
@@ -21,9 +21,7 @@ var upload = multer({ storage: storage })
 
 
 router.post("/", upload.single('file'), async (req, res) => {
-    console.log(req.body,)
     let { tags, description, group, mediaType } = req.body
-    console.log(tags)
 
     let tagsList = []
     let tagsObject = []
@@ -44,7 +42,6 @@ router.post("/", upload.single('file'), async (req, res) => {
 
     const groupObj = await Group.findOne({ name: group })
 
-    console.log(groupObj)
 
     let media = new Media({
         tags: tagsList,
@@ -57,7 +54,6 @@ router.post("/", upload.single('file'), async (req, res) => {
     media.save().then(data => {
         return res.send(data)
     }).catch(err => {
-        console.log('error')
         return res.status(400).send({ "error": err })
     })
 
@@ -77,6 +73,9 @@ router.post("/search", async (req, res) => {
         elem.updatedAt = item.updatedAt;
         elem.mediaType = item.mediaType;
         elem.mediaUrl = item.mediaUrl;
+        elem.uploadType = 'Student-Group';
+        elem.description = item.description;
+        elem.tags = item.tags;
         results.push(elem)
     })
     var data = await ProblemStatement.find({ "tags": { "$in": search } })
@@ -87,10 +86,31 @@ router.post("/search", async (req, res) => {
             elem.updatedAt = item.updatedAt || '';
             elem.mediaType = ref.mediaType;
             elem.mediaUrl = ref.media;
+            elem.uploadType = 'Problem Statement'
+            elem.tags = item.tags
+            elem.description = item.description;
             results.push(elem)
         })
-
     })
+
+
+    var data = await Template.find({ "tags": { "$in": search } })
+    data && data.length > 0 && data.map(item => {
+        var refs = item.references;
+        refs && refs.length > 0 && refs.map(ref => {
+            var elem = {};
+            elem.updatedAt = item.updatedAt || '';
+            elem.mediaType = ref.mediaType;
+            elem.mediaUrl = ref.media;
+            elem.uploadType = 'Templates'
+            elem.tags = item.tags
+            
+        elem.description = item.description;
+            results.push(elem)
+        })
+    })
+
+
 
     return res.send(results)
 
@@ -101,7 +121,6 @@ router.post('/group/', function (req, res, next) {
     Media.find({
         group: id
     }).then((data) => {
-        console.log(data)
         return res.send(data)
     })
 })
